@@ -1,0 +1,88 @@
+﻿<Window x:Class="ylccClientTool.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ylccClientTool"
+        mc:Ignorable="d"
+        Title="ylccClientTool" Height="700" Width="800">
+    <Grid>
+        <StackPanel Orientation="Vertical" HorizontalAlignment="Center">
+            <StackPanel Orientation="Horizontal">
+                <Label Content="VideoId" Margin="10" Width="50"/>
+                <TextBox x:Name="VideoIdTextBox" Text="{Binding VideoId}" TextWrapping="Wrap" Width="100" Margin="10"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <Label Content="URI"  Margin="10"  Width="50"/>
+                <TextBox Name="URITextBox" Text="{Binding Uri}"  TextWrapping="Wrap"  Width="200"  Margin="10"/>
+                <CheckBox Name="InsecureCheckBox" Content="Insecure" IsChecked="{Binding IsInsecure}" Margin="10"/>
+            </StackPanel>
+            <StackPanel Orientation="Vertical" HorizontalAlignment="Left">
+                <TabControl x:Name="MenuTabControl">
+                    <TabItem x:Name="TabItemWatchMessages" Header="WatchMessages">
+                        <StackPanel Orientation="Vertical" HorizontalAlignment="Left">
+                            <StackPanel Orientation="Horizontal">
+                                <Label Content="監視メッセージ" HorizontalAlignment="Left" VerticalContentAlignment="Center"  Margin="10"/>
+                                <TextBox Name="WatchMessageTextBox" HorizontalAlignment="Left" TextWrapping="Wrap" Text="" Width="400"  Margin="10"/>
+                                <Button Content="追加"  Click="AddWatchMessageClick" Margin="10"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Vertical" HorizontalAlignment="Left">
+                                <DataGrid Name="WatchMessagesDataGrid" AutoGenerateColumns="False"  Width="540"  Height="280" CanUserAddRows="False"  CanUserSortColumns="False" ItemsSource="{Binding WatchMessages}" Margin="10" >
+                                    <DataGrid.Columns>
+                                        <DataGridTextColumn  Width="400"  Header="監視メッセージ" Binding="{Binding Message, NotifyOnSourceUpdated=True}"/>
+                                        <DataGridTemplateColumn Width="60" Header="有効">
+                                            <DataGridTemplateColumn.CellTemplate>
+                                                <DataTemplate>
+                                                    <CheckBox IsChecked="{Binding Active, NotifyOnSourceUpdated=True}"/>
+                                                </DataTemplate>
+                                            </DataGridTemplateColumn.CellTemplate>
+                                        </DataGridTemplateColumn>
+                                        <DataGridTemplateColumn Width="*" Header="操作">
+                                            <DataGridTemplateColumn.CellTemplate>
+                                                <DataTemplate>
+                                                    <Button Content="削除" Click="WatchMessageRemove"/>
+                                                </DataTemplate>
+                                            </DataGridTemplateColumn.CellTemplate>
+                                        </DataGridTemplateColumn>
+                                    </DataGrid.Columns>
+                                </DataGrid>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBox x:Name="WatchMessagesMediaTextBox" Text="{Binding MediaFile}" TextWrapping="Wrap" Width="400" Margin="10"/>
+                                <Button Content="メディアファイル選択" Width="100" Margin="10" Click="WatchMessagesSelectMedia" />
+                                <Button Content="再生テスト" Width="100" Margin="10" Click="WatchMessagesTestMedia" />
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <Label Content="volume" Margin="10" />
+                                <Slider x:Name="WatchMessagesVolumeSlider" Value="{Binding Volume}"  Width="200" Minimum="0" Maximum="100" SmallChange="1" LargeChange="5" TickPlacement="TopLeft" IsSnapToTickEnabled="True" TickFrequency="1" />
+                                <Label  x:Name="WatchMessagesVolumeLabel" Content="{Binding Volume}"  Width="40"/>
+                                <Label  Content="%"  Width="30"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <Button Content="開始" Width="100" Margin="10" Click="WatchMessagesStart" />
+                            </StackPanel>
+                        </StackPanel>
+                    </TabItem>
+                    <TabItem x:Name="TabItemRandomChoiceMessages" Header="randomChoiceMessage">
+                        <StackPanel Orientation="Vertical" HorizontalAlignment="Left">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBox x:Name="RandomChoiceMediaTextBox" Text="{Binding VideoId}" TextWrapping="Wrap" Width="400" Margin="10"/>
+                                <Button Content="Select Media File" Width="100" Margin="10" Click="RandomChoiceSelectMedia" />
+                                <Button Content="Test Plau" Width="100" Margin="10" Click="RandomChoiceTestMedia" />
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <Label Content="volume" Margin="10" />
+                                <Slider x:Name="RandomChoiceVolumeSlider" Value="{Binding Volume}"  Width="200" Minimum="0" Maximum="100" SmallChange="1" LargeChange="5" TickPlacement="TopLeft" IsSnapToTickEnabled="True" TickFrequency="1" />
+                                <Label  x:Name="RandomChoiceVolumeLabel" Content="{Binding Volume}"  Width="40"/>
+                                <Label  Content="%"  Width="30"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <Button Content="開始" Width="100" Margin="10" Click="RandomChoiceStart" />
+                            </StackPanel>
+                        </StackPanel>
+                    </TabItem>
+                </TabControl>
+            </StackPanel>
+        </StackPanel>
+    </Grid>
+</Window>
