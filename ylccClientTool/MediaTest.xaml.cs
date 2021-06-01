@@ -17,11 +17,12 @@ namespace ylccClientTool
     /// </summary>
     public partial class MediaTestWindow : Window
     {
-        public MediaTestWindow(string source, Double volume)
+
+        public MediaTestWindow(WatchMessagesModel watchMessagesModel)
         {
             InitializeComponent();
-            TestMediaElement.Source = new Uri(source);
-            TestMediaElement.Volume = volume;
+            TestMediaElement.Source = new Uri(watchMessagesModel.MediaFile);
+            TestMediaElement.Volume = watchMessagesModel.Volume / 100;
         }
     }
 }

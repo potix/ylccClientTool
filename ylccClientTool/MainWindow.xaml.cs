@@ -31,11 +31,12 @@ namespace ylccClientTool
             VideoIdTextBox.DataContext = _commonModel;
             URITextBox.DataContext = _commonModel;
             InsecureCheckBox.DataContext = _commonModel;
+            WindowBackgroundColorTextBox.DataContext = _commonModel;
+            WindowBackgroundColorBorder.DataContext = _commonModel;
             WatchMessagesDataGrid.DataContext = _watchMessagesModel;
             WatchMessagesVolumeSlider.DataContext = _watchMessagesModel;
             WatchMessagesVolumeLabel.DataContext = _watchMessagesModel;
             WatchMessagesMediaTextBox.DataContext = _watchMessagesModel;
-
         }
 
         private void AddWatchMessageClick(object sender, EventArgs e)
@@ -63,7 +64,7 @@ namespace ylccClientTool
             OpenFileDialog dialog = new OpenFileDialog();
 
             // ファイルの種類を設定
-            dialog.Filter = "メディアファイル (*.wav)|*.wav|メディアファイル (*.wma)|*.wma|メディアファイル (*.wmv)|*.wmv|メディアファイル (*.midi)|*.midi|メディアファイル (*.avi)|*.avi|メディアファイル (*.mpg)|*.mpg|メディアファイル (*.mpeg)|*.mpeg|メディアファイル (*.mp4)|*.mp4|メディアファイル (*.mov)|*.mov|全てのファイル (*.*)|*.*";
+            dialog.Filter = "media file (*.*)|*.*";
             // ダイアログを表示する
             if (dialog.ShowDialog() == true)
             {
@@ -76,16 +77,14 @@ namespace ylccClientTool
             if (WatchMessagesMediaTextBox.Text == null | WatchMessagesMediaTextBox.Text == "") {
                 return;
             }
-            MediaTestWindow w = new MediaTestWindow(_watchMessagesModel.MediaFile, _watchMessagesModel.Volume / 100);
-            w.Show();
+            MediaTestWindow window = new MediaTestWindow(_watchMessagesModel);
+            window.Show();
         }
 
         private void WatchMessagesStart(object sender, EventArgs e)
         {
-            foreach(WatchMessage w in _watchMessagesModel.WatchMessages)
-            {
-                w.Active = false;
-            }
+
+
         }
 
         private void RandomChoiceSelectMedia(object sender, EventArgs e)

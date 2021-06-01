@@ -43,7 +43,7 @@ namespace ylccClientTool
         }
     }
 
-    class WatchMessagesModel : INotifyPropertyChanged
+    public class WatchMessagesModel : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -63,7 +63,20 @@ namespace ylccClientTool
             }
         } 
 
-        public Double Volume { get; set; }
+        private Double volume;
+        public Double Volume {
+            get 
+            {
+                return this.volume;
+            }
+            set
+            {
+                this.volume = value;
+                OnPropertyChanged("Volume");
+            }
+        }
+
+
 
         public WatchMessagesModel()
         {

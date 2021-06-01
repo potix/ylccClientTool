@@ -9,13 +9,18 @@
     <Grid>
         <StackPanel Orientation="Vertical" HorizontalAlignment="Center">
             <StackPanel Orientation="Horizontal">
-                <Label Content="VideoId" Margin="10" Width="50"/>
+                <Label Content="VideoId" Margin="10" Width="120"/>
                 <TextBox x:Name="VideoIdTextBox" Text="{Binding VideoId}" TextWrapping="Wrap" Width="100" Margin="10"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal">
-                <Label Content="URI"  Margin="10"  Width="50"/>
-                <TextBox Name="URITextBox" Text="{Binding Uri}"  TextWrapping="Wrap"  Width="200"  Margin="10"/>
-                <CheckBox Name="InsecureCheckBox" Content="Insecure" IsChecked="{Binding IsInsecure}" Margin="10"/>
+                <Label Content="URI" Margin="10"  Width="120"/>
+                <TextBox x:Name="URITextBox" Text="{Binding Uri}"  TextWrapping="Wrap"  Width="200"  Margin="10"/>
+                <CheckBox x:Name="InsecureCheckBox" Content="Insecure" IsChecked="{Binding IsInsecure}" Margin="10"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <Label Content="WindowBackground"  Margin="10"  Width="120"/>
+                <TextBox x:Name="WindowBackgroundColorTextBox"  Text="{Binding WindowBackgroundColor}" TextWrapping="Wrap" Margin="10" Width="100"/>
+                <Border x:Name="WindowBackgroundColorBorder" Background="{Binding WindowBackgroundColor}" BorderBrush="#000000"  BorderThickness="1" Margin="10" Width="30"/>
             </StackPanel>
             <StackPanel Orientation="Vertical" HorizontalAlignment="Left">
                 <TabControl x:Name="MenuTabControl">
