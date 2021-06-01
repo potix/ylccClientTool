@@ -37,6 +37,8 @@ namespace ylccClientTool
             WatchMessagesVolumeSlider.DataContext = _watchMessagesModel;
             WatchMessagesVolumeLabel.DataContext = _watchMessagesModel;
             WatchMessagesMediaTextBox.DataContext = _watchMessagesModel;
+            WatchMessagesMediaWidthTextBox.DataContext = _watchMessagesModel;
+            WatchMessagesMediaHeightTextBox.DataContext = _watchMessagesModel;
         }
 
         private void AddWatchMessageClick(object sender, EventArgs e)
@@ -77,7 +79,7 @@ namespace ylccClientTool
             if (WatchMessagesMediaTextBox.Text == null | WatchMessagesMediaTextBox.Text == "") {
                 return;
             }
-            MediaTestWindow window = new MediaTestWindow(_watchMessagesModel);
+            MediaTestWindow window = new MediaTestWindow(_commonModel,  _watchMessagesModel);
             window.Show();
         }
 

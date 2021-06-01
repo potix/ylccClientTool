@@ -4,7 +4,7 @@ using System.Text;
 
 namespace ylccClientTool
 {
-    class CommonModel
+    public class CommonModel
     {
         public string VideoId { get; set; }
 

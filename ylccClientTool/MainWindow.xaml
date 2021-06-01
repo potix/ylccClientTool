@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ylccClientTool"
         mc:Ignorable="d"
-        Title="ylccClientTool" Height="700" Width="800">
+        Title="ylccClientTool" Height="800" Width="800">
     <Grid>
         <StackPanel Orientation="Vertical" HorizontalAlignment="Center">
             <StackPanel Orientation="Horizontal">
@@ -25,10 +25,10 @@
             <StackPanel Orientation="Vertical" HorizontalAlignment="Left">
                 <TabControl x:Name="MenuTabControl">
                     <TabItem x:Name="TabItemWatchMessages" Header="WatchMessages">
-                        <StackPanel Orientation="Vertical" HorizontalAlignment="Left">
+                        <StackPanel Orientation="Vertical" HorizontalAlignment="Left" Width="700">
                             <StackPanel Orientation="Horizontal">
                                 <Label Content="監視メッセージ" HorizontalAlignment="Left" VerticalContentAlignment="Center"  Margin="10"/>
-                                <TextBox Name="WatchMessageTextBox" HorizontalAlignment="Left" TextWrapping="Wrap" Text="" Width="400"  Margin="10"/>
+                                <TextBox Name="WatchMessageTextBox" TextWrapping="Wrap" Text="" Width="400"  Margin="10"/>
                                 <Button Content="追加"  Click="AddWatchMessageClick" Margin="10"/>
                             </StackPanel>
                             <StackPanel Orientation="Vertical" HorizontalAlignment="Left">
@@ -58,10 +58,18 @@
                                 <Button Content="再生テスト" Width="100" Margin="10" Click="WatchMessagesTestMedia" />
                             </StackPanel>
                             <StackPanel Orientation="Horizontal">
-                                <Label Content="volume" Margin="10" />
+                                <Label Content="volume" Margin="10" Width="50" />
                                 <Slider x:Name="WatchMessagesVolumeSlider" Value="{Binding Volume}"  Width="200" Minimum="0" Maximum="100" SmallChange="1" LargeChange="5" TickPlacement="TopLeft" IsSnapToTickEnabled="True" TickFrequency="1" />
                                 <Label  x:Name="WatchMessagesVolumeLabel" Content="{Binding Volume}"  Width="40"/>
                                 <Label  Content="%"  Width="30"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <Label Content="Width" Margin="10"  Width="50" />
+                                <TextBox x:Name="WatchMessagesMediaWidthTextBox"  Text="{Binding MediaWidth}"  TextWrapping="Wrap" Width="100"  Margin="10"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <Label Content="Height" Margin="10" Width="50" />
+                                <TextBox x:Name="WatchMessagesMediaHeightTextBox"  Text="{Binding MediaHeight}" TextWrapping="Wrap" Width="100"  Margin="10"/>
                             </StackPanel>
                             <StackPanel Orientation="Horizontal">
                                 <Button Content="開始" Width="100" Margin="10" Click="WatchMessagesStart" />
@@ -80,6 +88,14 @@
                                 <Slider x:Name="RandomChoiceVolumeSlider" Value="{Binding Volume}"  Width="200" Minimum="0" Maximum="100" SmallChange="1" LargeChange="5" TickPlacement="TopLeft" IsSnapToTickEnabled="True" TickFrequency="1" />
                                 <Label  x:Name="RandomChoiceVolumeLabel" Content="{Binding Volume}"  Width="40"/>
                                 <Label  Content="%"  Width="30"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <Label Content="Width" Margin="10" />
+                                <TextBox x:Name="RandomChoiceMediaWidthTextBox" Text="{Binding MediaWidth}"  TextWrapping="Wrap" Width="100"  Margin="10"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <Label Content="Height" Margin="10" />
+                                <TextBox x:Name="RandomChoiceHeightTextBox" Text="{Binding MediaHeight}"  TextWrapping="Wrap" Width="100"  Margin="10"/>
                             </StackPanel>
                             <StackPanel Orientation="Horizontal">
                                 <Button Content="開始" Width="100" Margin="10" Click="RandomChoiceStart" />

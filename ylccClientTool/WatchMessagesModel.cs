@@ -76,12 +76,15 @@ namespace ylccClientTool
             }
         }
 
-
+        public int MediaWidth { get; set; }
+        public int MediaHeight { get; set; }
 
         public WatchMessagesModel()
         {
             WatchMessages = new ObservableCollection<WatchMessage>();
             Volume = 100.0;
+            MediaWidth = 400;
+            MediaHeight = 400;
         }
 
         protected void OnPropertyChanged([CallerMemberName] string name = null)
