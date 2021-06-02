@@ -2,7 +2,9 @@
 using Grpc.Net.Client;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Text;
 using System.Threading;
 using System.Windows;
@@ -22,13 +24,14 @@ namespace ylccClientTool
     /// </summary>
     public partial class RandomChoiceWindow : Window
     {
-
         private CommonModel _commonModel;
         private RandomChoiceModel _randomChoiceModel;
         private YlccProtocol protocol = new YlccProtocol();
         private CancellationTokenSource cancelSource;
         private CancellationToken cancelToken;
-
+        private object _lock = new object();
+        private bool _getMessageRequest;
+        private Random rand = new Random();
 
         public RandomChoiceWindow(CommonModel commonModel, RandomChoiceModel randomChoiceModel)
         {
@@ -44,8 +47,8 @@ namespace ylccClientTool
             Width = randomChoiceModel.MediaWidth + 40;
             Height = randomChoiceModel.MediaHeight + 40 + 100;
 
-            WatchMessagesMediaElement.Width = randomChoiceModel.MediaWidth;
-            WatchMessagesMediaElement.Height = randomChoiceModel.MediaHeight;
+            RandomChoiceMediaElement.Width = randomChoiceModel.MediaWidth;
+            RandomChoiceMediaElement.Height = randomChoiceModel.MediaHeight;
 
             dColor = System.Drawing.ColorTranslator.FromHtml(randomChoiceModel.LabelForeground);
             mColor = System.Windows.Media.Color.FromArgb(dColor.A, dColor.R, dColor.G, dColor.B);
@@ -100,6 +103,7 @@ namespace ylccClientTool
                     {
                         continue;
                     }
+                    Collection<ActiveLiveChatMessage> candidateMessages = new Collection<ActiveLiveChatMessage>();
                     foreach (ActiveLiveChatMessage activeLiveChatMessage in response.ActiveLiveChatMessages)
                     {
                         if (_commonModel.TargetValue.Target == Target.OwnerModerator && !activeLiveChatMessage.AuthorIsChatModerator)
@@ -110,10 +114,22 @@ namespace ylccClientTool
                         {
                             continue;
                         }
-
-
-                        // XXXXXX
-
+                        candidateMessages.Add(activeLiveChatMessage);
+                    }
+                    if (candidateMessages.Count == 0)
+                    {
+                        continue;
+                    }
+                    var getMessageRequest = false;
+                    lock (_lock)
+                    {
+                        getMessageRequest = _getMessageRequest;
+                        _getMessageRequest = false;
+                    }
+                    if (getMessageRequest)
+                    {
+                        int idx = rand.Next(candidateMessages.Count);
+                        WindowUpdate(candidateMessages[idx]);
                     }
                 }
                 await channel.ShutdownAsync();
@@ -137,17 +153,32 @@ namespace ylccClientTool
             }
         }
 
-        private void getMessage()
+        private void WindowUpdate(ActiveLiveChatMessage activeLiveChatMessage)
+        {
+            this.Dispatcher.Invoke((Action)(() =>
+            {
+                if (!(_randomChoiceModel.MediaFile == null || _randomChoiceModel.MediaFile == ""))
+                {
+                    RandomChoiceMediaElement.Source = new Uri(_randomChoiceModel.MediaFile);
+                    RandomChoiceMediaElement.Volume = _randomChoiceModel.Volume / 100;
+                }
+                AuthorLabel.Content = activeLiveChatMessage.AuthorDisplayName;
+                MessageLabel.Content = activeLiveChatMessage.DisplayMessage;
+            }));
+        }
+
+        private void GetMessage(object sender, EventArgs e)
         {
             if (!(_randomChoiceModel.MediaFile == null || _randomChoiceModel.MediaFile == ""))
             {
-                WatchMessagesMediaElement.Source = null;
+                RandomChoiceMediaElement.Source = null;
             }
             AuthorLabel.Content = "";
             MessageLabel.Content = "";
-
-
-
+            lock (_lock)
+            {
+                _getMessageRequest = true;
+            }
         }
 
         private void WindowClosing(object sender, CancelEventArgs e)
@@ -157,6 +188,5 @@ namespace ylccClientTool
                 cancelSource.Cancel();
             }
         }
-
     }
 }

@@ -6,7 +6,7 @@ using System.Text;
 
 namespace ylccClientTool
 {
-    public class RandomChoiceModel
+    public class RandomChoiceModel : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
 

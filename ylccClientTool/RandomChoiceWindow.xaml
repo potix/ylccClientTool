@@ -9,12 +9,24 @@
         Title="RandomChoiceWindow" Height="540" Width="440">
     <Grid>
         <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
-            <MediaElement x:Name="WatchMessagesMediaElement" Volume="1" Width="400" Height="400"></MediaElement>
-            <Button  Content="メッセージ取得" Margin="10" Click="GetMessage">
+            <MediaElement x:Name="RandomChoiceMediaElement" Volume="1" Width="400" Height="400"></MediaElement>
+            <Button Content="メッセージ取得" Margin="10" Foreground="GhostWhite" Click="GetMessage">
                 <Button.Template>
                     <ControlTemplate TargetType="Button">
-                        <Border Name="border" BorderThickness="2" BorderBrush="DarkGray" Background="WhiteSmoke" CornerRadius="10">
+                        <Border Name="ButtonBorder" BorderThickness="4" CornerRadius="10">
                             <ContentPresenter VerticalAlignment="Center" HorizontalAlignment="Center" />
+                            <Border.Style>
+                                <Style TargetType="{x:Type Border}">
+                                    <Setter Property="BorderBrush" Value="LightGray" />
+                                    <Setter Property="Background" Value="DimGray" />
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding IsPressed, RelativeSource={RelativeSource Mode=TemplatedParent}}" Value="True">
+                                            <Setter Property="BorderBrush" Value="WhiteSmoke"/>
+                                            <Setter Property="Background" Value="DarkGray"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Border.Style>
                         </Border>
                     </ControlTemplate>
                 </Button.Template>

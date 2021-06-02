@@ -132,7 +132,9 @@ namespace ylccClientTool
 
         private void RandomChoiceStart(object sender, EventArgs e)
         {
-
+            RandomChoiceWindow window = new RandomChoiceWindow(_commonModel, _randomChoiceModel);
+            window.Show();
+            window.Start();
         }
 
 

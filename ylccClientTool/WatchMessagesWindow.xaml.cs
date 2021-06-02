@@ -162,7 +162,6 @@ namespace ylccClientTool
                 }
                 this.Dispatcher.Invoke((Action)(() =>
                 {
-                    Debug.Print("A");
                     if (!(_watchMessagesModel.MediaFile == null || _watchMessagesModel.MediaFile == ""))
                     {
                         WatchMessagesMediaElement.Source = new Uri(_watchMessagesModel.MediaFile);
