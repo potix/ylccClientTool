@@ -98,7 +98,7 @@ namespace ylccClientTool
                         sb.Append("Reason:" + getWordCloudResponse.Status.Message + "\n");
                         MessageBox.Show(sb.ToString());
                         this.Close();
-                        break;
+                        return;
                     }
                     if (getWordCloudResponse.Status.Code == Code.InProgress)
                     {
