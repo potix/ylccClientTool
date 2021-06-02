@@ -7,6 +7,14 @@
         mc:Ignorable="d"
         Title="MediaTestWindow" Height="300" Width="300">
     <Grid>
-        <MediaElement x:Name="TestMediaElement" Volume="1" Width="200" Height="200"></MediaElement>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="77*"/>
+            <ColumnDefinition Width="223*"/>
+        </Grid.ColumnDefinitions>
+        <MediaElement x:Name="TestMediaElement" Volume="1" Width="200" Height="200" Grid.ColumnSpan="2" Margin="50,42,50,42" />
+        <StackPanel Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Column="1" Margin="68,0,0,0">
+            <Label x:Name="AuthorLabel" HorizontalAlignment="Center"></Label>
+            <Label x:Name="MessageLabel" HorizontalAlignment="Center"></Label>
+        </StackPanel>
     </Grid>
 </Window>

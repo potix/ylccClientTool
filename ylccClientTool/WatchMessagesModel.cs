@@ -37,6 +37,21 @@ namespace ylccClientTool
                 OnPropertyChanged("Active");
             }
         }
+
+        private string author;
+        public string Author
+        {
+            get
+            {
+                return this.author;
+            }
+            set
+            {
+                this.author = value;
+                OnPropertyChanged("Author");
+            }
+        }
+
         protected void OnPropertyChanged([CallerMemberName] string name = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
@@ -79,12 +94,17 @@ namespace ylccClientTool
         public int MediaWidth { get; set; }
         public int MediaHeight { get; set; }
 
+        public string LabelForeground { get; set; }
+        public Double LabelFontSize { get; set; }
+
         public WatchMessagesModel()
         {
             WatchMessages = new ObservableCollection<WatchMessage>();
             Volume = 100.0;
             MediaWidth = 400;
             MediaHeight = 400;
+            LabelForeground = "#FFFFFFFF";
+            LabelFontSize = 20;
         }
 
         protected void OnPropertyChanged([CallerMemberName] string name = null)

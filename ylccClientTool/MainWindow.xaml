@@ -5,47 +5,58 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ylccClientTool"
         mc:Ignorable="d"
-        Title="ylccClientTool" Height="800" Width="800">
+        Title="ylccClientTool" Height="720" Width="800">
     <Grid>
         <StackPanel Orientation="Vertical" HorizontalAlignment="Center">
             <StackPanel Orientation="Horizontal">
-                <Label Content="VideoId" Margin="10" Width="120"/>
-                <TextBox x:Name="VideoIdTextBox" Text="{Binding VideoId}" TextWrapping="Wrap" Width="100" Margin="10"/>
+                <Label Content="VideoId" Margin="5" Width="120"/>
+                <TextBox x:Name="VideoIdTextBox" Text="{Binding VideoId}" Width="100" Margin="5"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal">
-                <Label Content="URI" Margin="10"  Width="120"/>
-                <TextBox x:Name="URITextBox" Text="{Binding Uri}"  TextWrapping="Wrap"  Width="200"  Margin="10"/>
-                <CheckBox x:Name="InsecureCheckBox" Content="Insecure" IsChecked="{Binding IsInsecure}" Margin="10"/>
+                <Label Content="URI" Margin="5"  Width="120"/>
+                <TextBox x:Name="URITextBox" Text="{Binding Uri}" Width="200"  Margin="5"/>
+                <CheckBox x:Name="InsecureCheckBox" Content="Insecure" IsChecked="{Binding IsInsecure}" Margin="5"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal">
-                <Label Content="WindowBackground"  Margin="10"  Width="120"/>
-                <TextBox x:Name="WindowBackgroundColorTextBox"  Text="{Binding WindowBackgroundColor}" TextWrapping="Wrap" Margin="10" Width="100"/>
-                <Border x:Name="WindowBackgroundColorBorder" Background="{Binding WindowBackgroundColor}" BorderBrush="#000000"  BorderThickness="1" Margin="10" Width="30"/>
+                <Label Content="Target" Margin="5"  Width="120" />
+                <ComboBox Name="TargetComboBox"  Width="220"  Margin="5"  ItemsSource="{Binding CandidateTargetValues}" SelectedValue="{Binding TargetValue}" DisplayMemberPath="Label"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <Label Content="WindowBackground"  Margin="5"  Width="120"/>
+                <TextBox x:Name="WindowBackgroundColorTextBox"  Text="{Binding WindowBackgroundColor}" Margin="5" Width="100" PreviewTextInput="ColorPreviewTextInput" CommandManager.PreviewExecuted="ColorPreviewExecuted"/>
+                <Border x:Name="WindowBackgroundColorBorder" Background="{Binding WindowBackgroundColor}" BorderBrush="#FF000000"  BorderThickness="1" Margin="5" Width="30"/>
             </StackPanel>
             <StackPanel Orientation="Vertical" HorizontalAlignment="Left">
-                <TabControl x:Name="MenuTabControl">
+                <TabControl x:Name="MenuTabControl" Width="700">
                     <TabItem x:Name="TabItemWatchMessages" Header="WatchMessages">
-                        <StackPanel Orientation="Vertical" HorizontalAlignment="Left" Width="700">
+                        <StackPanel Orientation="Vertical" HorizontalAlignment="Left" >
                             <StackPanel Orientation="Horizontal">
-                                <Label Content="監視メッセージ" HorizontalAlignment="Left" VerticalContentAlignment="Center"  Margin="10"/>
-                                <TextBox Name="WatchMessageTextBox" TextWrapping="Wrap" Text="" Width="400"  Margin="10"/>
-                                <Button Content="追加"  Click="AddWatchMessageClick" Margin="10"/>
+                                <Label Content="watch message" HorizontalAlignment="Left" VerticalContentAlignment="Center"  Margin="5"/>
+                                <TextBox x:Name="WatchMessageTextBox" Text="" Width="400"  Margin="5"/>
+                                <Button Content="追加"  Click="AddWatchMessageClick" Margin="5"/>
                             </StackPanel>
                             <StackPanel Orientation="Vertical" HorizontalAlignment="Left">
-                                <DataGrid Name="WatchMessagesDataGrid" AutoGenerateColumns="False"  Width="540"  Height="280" CanUserAddRows="False"  CanUserSortColumns="False" ItemsSource="{Binding WatchMessages}" Margin="10" >
+                                <DataGrid Name="WatchMessagesDataGrid" AutoGenerateColumns="False"  Width="640"  Height="200" CanUserAddRows="False"  CanUserSortColumns="False" ItemsSource="{Binding WatchMessages}" Margin="5" >
                                     <DataGrid.Columns>
-                                        <DataGridTextColumn  Width="400"  Header="監視メッセージ" Binding="{Binding Message, NotifyOnSourceUpdated=True}"/>
-                                        <DataGridTemplateColumn Width="60" Header="有効">
+                                        <DataGridTextColumn Width="300"  Header="watch messages" Binding="{Binding Message}"/>
+                                        <DataGridTemplateColumn Width="200" Header="author">
                                             <DataGridTemplateColumn.CellTemplate>
                                                 <DataTemplate>
-                                                    <CheckBox IsChecked="{Binding Active, NotifyOnSourceUpdated=True}"/>
+                                                    <Label Content="{Binding Author, Mode=TwoWay}"/>
                                                 </DataTemplate>
                                             </DataGridTemplateColumn.CellTemplate>
                                         </DataGridTemplateColumn>
-                                        <DataGridTemplateColumn Width="*" Header="操作">
+                                        <DataGridTemplateColumn Width="60" Header="active">
                                             <DataGridTemplateColumn.CellTemplate>
                                                 <DataTemplate>
-                                                    <Button Content="削除" Click="WatchMessageRemove"/>
+                                                    <CheckBox IsChecked="{Binding Active, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                                </DataTemplate>
+                                            </DataGridTemplateColumn.CellTemplate>
+                                        </DataGridTemplateColumn>
+                                        <DataGridTemplateColumn Width="*" Header="operation">
+                                            <DataGridTemplateColumn.CellTemplate>
+                                                <DataTemplate>
+                                                    <Button Content="remove" Click="WatchMessageRemove"/>
                                                 </DataTemplate>
                                             </DataGridTemplateColumn.CellTemplate>
                                         </DataGridTemplateColumn>
@@ -53,52 +64,70 @@
                                 </DataGrid>
                             </StackPanel>
                             <StackPanel Orientation="Horizontal">
-                                <TextBox x:Name="WatchMessagesMediaTextBox" Text="{Binding MediaFile}" TextWrapping="Wrap" Width="400" Margin="10"/>
-                                <Button Content="メディアファイル選択" Width="100" Margin="10" Click="WatchMessagesSelectMedia" />
-                                <Button Content="再生テスト" Width="100" Margin="10" Click="WatchMessagesTestMedia" />
+                                <TextBox x:Name="WatchMessagesMediaTextBox" Text="{Binding MediaFile, Mode=TwoWay}"  Width="400" Margin="5"/>
+                                <Button Content="select media file" Width="100" Margin="5" Click="WatchMessagesSelectMedia" />
+                                <Button Content="test play" Width="100" Margin="5" Click="WatchMessagesTestMedia" />
                             </StackPanel>
                             <StackPanel Orientation="Horizontal">
-                                <Label Content="volume" Margin="10" Width="50" />
-                                <Slider x:Name="WatchMessagesVolumeSlider" Value="{Binding Volume}"  Width="200" Minimum="0" Maximum="100" SmallChange="1" LargeChange="5" TickPlacement="TopLeft" IsSnapToTickEnabled="True" TickFrequency="1" />
-                                <Label  x:Name="WatchMessagesVolumeLabel" Content="{Binding Volume}"  Width="40"/>
-                                <Label  Content="%"  Width="30"/>
+                                <Label Content="volume" Margin="5"  Width="100" />
+                                <Slider x:Name="WatchMessagesVolumeSlider" Value="{Binding Volume}"  Width="200" Minimum="0" Maximum="100" SmallChange="1" LargeChange="5" TickPlacement="TopLeft" IsSnapToTickEnabled="True" TickFrequency="1" Margin="5" />
+                                <Label  x:Name="WatchMessagesVolumeLabel" Content="{Binding Volume}"  Width="40" Margin="5"/>
+                                <Label  Content="%"  Width="30" Margin="5"/>
                             </StackPanel>
                             <StackPanel Orientation="Horizontal">
-                                <Label Content="Width" Margin="10"  Width="50" />
-                                <TextBox x:Name="WatchMessagesMediaWidthTextBox"  Text="{Binding MediaWidth}"  TextWrapping="Wrap" Width="100"  Margin="10"/>
+                                <Label Content="Width" Margin="5"  Width="100" />
+                                <TextBox x:Name="WatchMessagesMediaWidthTextBox"  Text="{Binding MediaWidth}"  Width="100"  Margin="5" PreviewTextInput="IntPreviewTextInput" CommandManager.PreviewExecuted="IntPreviewExecuted"/>
                             </StackPanel>
                             <StackPanel Orientation="Horizontal">
-                                <Label Content="Height" Margin="10" Width="50" />
-                                <TextBox x:Name="WatchMessagesMediaHeightTextBox"  Text="{Binding MediaHeight}" TextWrapping="Wrap" Width="100"  Margin="10"/>
+                                <Label Content="Height" Margin="5"  Width="100" />
+                                <TextBox x:Name="WatchMessagesMediaHeightTextBox"  Text="{Binding MediaHeight}"  Width="100"  Margin="5" PreviewTextInput="IntPreviewTextInput" CommandManager.PreviewExecuted="IntPreviewExecuted"/>
                             </StackPanel>
                             <StackPanel Orientation="Horizontal">
-                                <Button Content="開始" Width="100" Margin="10" Click="WatchMessagesStart" />
+                                <Label Content="LabelForeground" Width="100" Margin="5" />
+                                <TextBox x:Name="WatchMessagesLabelForeground" Text="{Binding LabelForeground}"  Width="100"  Margin="5" PreviewTextInput="ColorPreviewTextInput" CommandManager.PreviewExecuted="ColorPreviewExecuted"/>
+                                <Border x:Name="WatchMessagesLabelForegroundBorder" Background="{Binding LabelForeground}" BorderBrush="#FF000000"  BorderThickness="1" Margin="5" Width="30"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <Label Content="LabelFontSize" Width="100" Margin="5" />
+                                <TextBox x:Name="WatchMessagesLabelFontSize" Text="{Binding LabelFontSize}"  Width="100"  Margin="5" PreviewTextInput="IntPreviewTextInput" CommandManager.PreviewExecuted="IntPreviewExecuted"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <Button Content="Start" Width="100" Margin="5" Click="WatchMessagesStart" />
                             </StackPanel>
                         </StackPanel>
                     </TabItem>
                     <TabItem x:Name="TabItemRandomChoiceMessages" Header="randomChoiceMessage">
                         <StackPanel Orientation="Vertical" HorizontalAlignment="Left">
                             <StackPanel Orientation="Horizontal">
-                                <TextBox x:Name="RandomChoiceMediaTextBox" Text="{Binding VideoId}" TextWrapping="Wrap" Width="400" Margin="10"/>
-                                <Button Content="Select Media File" Width="100" Margin="10" Click="RandomChoiceSelectMedia" />
-                                <Button Content="Test Plau" Width="100" Margin="10" Click="RandomChoiceTestMedia" />
+                                <TextBox x:Name="RandomChoiceMediaTextBox" Text="{Binding MediaFile, Mode=TwoWay}"  Width="400" Margin="5"/>
+                                <Button Content="Select Media File" Width="100" Margin="5" Click="RandomChoiceSelectMedia" />
+                                <Button Content="Test Play" Width="100" Margin="5" Click="RandomChoiceTestMedia" />
                             </StackPanel>
                             <StackPanel Orientation="Horizontal">
-                                <Label Content="volume" Margin="10" />
-                                <Slider x:Name="RandomChoiceVolumeSlider" Value="{Binding Volume}"  Width="200" Minimum="0" Maximum="100" SmallChange="1" LargeChange="5" TickPlacement="TopLeft" IsSnapToTickEnabled="True" TickFrequency="1" />
-                                <Label  x:Name="RandomChoiceVolumeLabel" Content="{Binding Volume}"  Width="40"/>
-                                <Label  Content="%"  Width="30"/>
+                                <Label Content="volume" Width="100" Margin="5" />
+                                <Slider x:Name="RandomChoiceVolumeSlider" Value="{Binding Volume}"  Width="200" Minimum="0" Maximum="100" SmallChange="1" LargeChange="5" TickPlacement="TopLeft" IsSnapToTickEnabled="True" TickFrequency="1" Margin="5"/>
+                                <Label  x:Name="RandomChoiceVolumeLabel" Content="{Binding Volume}"  Width="40" Margin="5"/>
+                                <Label  Content="%"  Width="30" Margin="5"/>
                             </StackPanel>
                             <StackPanel Orientation="Horizontal">
-                                <Label Content="Width" Margin="10" />
-                                <TextBox x:Name="RandomChoiceMediaWidthTextBox" Text="{Binding MediaWidth}"  TextWrapping="Wrap" Width="100"  Margin="10"/>
+                                <Label Content="Width" Width="100" Margin="5" />
+                                <TextBox x:Name="RandomChoiceMediaWidthTextBox" Text="{Binding MediaWidth}" Width="100"  Margin="5" PreviewTextInput="IntPreviewTextInput" CommandManager.PreviewExecuted="IntPreviewExecuted"/>
                             </StackPanel>
                             <StackPanel Orientation="Horizontal">
-                                <Label Content="Height" Margin="10" />
-                                <TextBox x:Name="RandomChoiceHeightTextBox" Text="{Binding MediaHeight}"  TextWrapping="Wrap" Width="100"  Margin="10"/>
+                                <Label Content="Height" Width="100" Margin="5" />
+                                <TextBox x:Name="RandomChoiceHeightTextBox" Text="{Binding MediaHeight}"  Width="100"  Margin="5" PreviewTextInput="IntPreviewTextInput" CommandManager.PreviewExecuted="IntPreviewExecuted"/>
                             </StackPanel>
                             <StackPanel Orientation="Horizontal">
-                                <Button Content="開始" Width="100" Margin="10" Click="RandomChoiceStart" />
+                                <Label Content="LabelForeground" Width="100" Margin="5" />
+                                <TextBox x:Name="RandomChoiceLabelForeground" Text="{Binding LabelForeground}"  Width="100"  Margin="5" PreviewTextInput="ColorPreviewTextInput" CommandManager.PreviewExecuted="ColorPreviewExecuted"/>
+                                <Border x:Name="RandomChoiceLabelForegroundBorder" Background="{Binding LabelForeground}" BorderBrush="#FF000000"  BorderThickness="1" Margin="5" Width="30"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <Label Content="LabelFontSize" Width="100" Margin="5" />
+                                <TextBox x:Name="RandomChoiceLabelFontSize" Text="{Binding LabelFontSize}" Width="100"  Margin="5" PreviewTextInput="IntPreviewTextInput" CommandManager.PreviewExecuted="IntPreviewExecuted"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <Button Content="Start" Width="100" Margin="5" Click="RandomChoiceStart" />
                             </StackPanel>
                         </StackPanel>
                     </TabItem>

@@ -5,8 +5,13 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ylccClientTool"
         mc:Ignorable="d"
-        Title="WatchMessagesWindow" Height="450" Width="800">
+        Closing="WindowClosing"
+        Title="WatchMessagesWindow" Height="440" Width="440">
     <Grid>
-        <MediaElement x:Name="WatchMessagesMediaElement" Volume="1" Width="600" Height="600"></MediaElement>
+        <MediaElement x:Name="WatchMessagesMediaElement" Volume="1" Width="400" Height="400"></MediaElement>
+        <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
+            <Label x:Name="AuthorLabel"  Content="" HorizontalAlignment="Center"></Label>
+            <Label x:Name="MessageLabel" Content="" HorizontalAlignment="Center"></Label>
+        </StackPanel>
     </Grid>
 </Window>

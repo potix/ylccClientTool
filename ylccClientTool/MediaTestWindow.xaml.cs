@@ -29,10 +29,20 @@ namespace ylccClientTool
             Width = watchMessagesModel.MediaWidth + 40;
             Height = watchMessagesModel.MediaHeight + 40;
 
-            TestMediaElement.Source = new Uri(watchMessagesModel.MediaFile);
-            TestMediaElement.Volume = watchMessagesModel.Volume / 100;
             TestMediaElement.Width = watchMessagesModel.MediaWidth;
             TestMediaElement.Height = watchMessagesModel.MediaHeight;
+
+            dColor = System.Drawing.ColorTranslator.FromHtml(watchMessagesModel.LabelForeground);
+            mColor = System.Windows.Media.Color.FromArgb(dColor.A, dColor.R, dColor.G, dColor.B);
+            AuthorLabel.Foreground = new SolidColorBrush(mColor);
+            AuthorLabel.FontSize = watchMessagesModel.LabelFontSize;
+            MessageLabel.Foreground = new SolidColorBrush(mColor);
+            MessageLabel.FontSize = watchMessagesModel.LabelFontSize;
+
+            TestMediaElement.Source = new Uri(watchMessagesModel.MediaFile);
+            TestMediaElement.Volume = watchMessagesModel.Volume / 100;
+            AuthorLabel.Content = "Author";
+            MessageLabel.Content = "Message";
         }
     }
 }

@@ -1,8 +1,10 @@
 ﻿using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -23,13 +25,14 @@ namespace ylccClientTool
     {
 
         private CommonModel _commonModel = new CommonModel();
-        private WatchMessagesModel _watchMessagesModel = new WatchMessagesModel();
+        private WatchMessagesModel _watchMessagesModel = new WatchMessagesModel();        
 
         public MainWindow()
         {
             InitializeComponent();
             VideoIdTextBox.DataContext = _commonModel;
             URITextBox.DataContext = _commonModel;
+            TargetComboBox.DataContext = _commonModel;
             InsecureCheckBox.DataContext = _commonModel;
             WindowBackgroundColorTextBox.DataContext = _commonModel;
             WindowBackgroundColorBorder.DataContext = _commonModel;
@@ -39,6 +42,8 @@ namespace ylccClientTool
             WatchMessagesMediaTextBox.DataContext = _watchMessagesModel;
             WatchMessagesMediaWidthTextBox.DataContext = _watchMessagesModel;
             WatchMessagesMediaHeightTextBox.DataContext = _watchMessagesModel;
+            WatchMessagesLabelForeground.DataContext = _watchMessagesModel;
+            WatchMessagesLabelFontSize.DataContext = _watchMessagesModel;
         }
 
         private void AddWatchMessageClick(object sender, EventArgs e)
@@ -47,7 +52,7 @@ namespace ylccClientTool
             {
                 return;
             }
-            _watchMessagesModel.WatchMessages.Add(new WatchMessage() { Message = WatchMessageTextBox.Text, Active = true });
+            _watchMessagesModel.WatchMessages.Add(new WatchMessage() { Message = WatchMessageTextBox.Text, Active = true, Author = "" });
             WatchMessageTextBox.Text = "";
         }
 
@@ -86,7 +91,9 @@ namespace ylccClientTool
         private void WatchMessagesStart(object sender, EventArgs e)
         {
 
-
+            WatchMessagesWindow window = new WatchMessagesWindow(_commonModel, _watchMessagesModel);
+            window.Show();
+            window.WatchMessage();
         }
 
         private void RandomChoiceSelectMedia(object sender, EventArgs e)
@@ -104,5 +111,43 @@ namespace ylccClientTool
 
         }
 
+
+        private void DoublePreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+            e.Handled = !new Regex("[0-9.]").IsMatch(e.Text);
+        }
+
+        private void DoublePreviewExecuted(object sender, ExecutedRoutedEventArgs e)
+        {
+            if (e.Command == ApplicationCommands.Paste)
+            {
+                e.Handled = true;
+            }
+        }
+        private void IntPreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+            e.Handled = !new Regex("[0-9]").IsMatch(e.Text);
+        }
+
+        private void IntPreviewExecuted(object sender, ExecutedRoutedEventArgs e)
+        {
+            if (e.Command == ApplicationCommands.Paste)
+            {
+                e.Handled = true;
+            }
+        }
+
+        private void ColorPreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+            e.Handled = !new Regex("[0-9a-fA-f#]").IsMatch(e.Text);
+        }
+
+        private void ColorPreviewExecuted(object sender, ExecutedRoutedEventArgs e)
+        {
+            if (e.Command == ApplicationCommands.Paste)
+            {
+                e.Handled = true;
+            }
+        }
     }
 }
