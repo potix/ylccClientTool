@@ -18,7 +18,7 @@ namespace ylccClientTool
     public partial class MediaTestWindow : Window
     {
 
-        public MediaTestWindow(CommonModel commonModel, WatchMessagesModel watchMessagesModel)
+        public MediaTestWindow(CommonModel commonModel, RandomChoiceModel randomChoice)
         {
             InitializeComponent();
 
@@ -26,21 +26,21 @@ namespace ylccClientTool
             Color mColor = Color.FromArgb(dColor.A, dColor.R, dColor.G, dColor.B);
             Background = new SolidColorBrush(mColor);
 
-            Width = watchMessagesModel.MediaWidth + 40;
-            Height = watchMessagesModel.MediaHeight + 40;
+            Width = randomChoice.MediaWidth + 40;
+            Height = randomChoice.MediaHeight + 40;
 
-            TestMediaElement.Width = watchMessagesModel.MediaWidth;
-            TestMediaElement.Height = watchMessagesModel.MediaHeight;
+            TestMediaElement.Width = randomChoice.MediaWidth;
+            TestMediaElement.Height = randomChoice.MediaHeight;
 
-            dColor = System.Drawing.ColorTranslator.FromHtml(watchMessagesModel.LabelForeground);
+            dColor = System.Drawing.ColorTranslator.FromHtml(randomChoice.LabelForeground);
             mColor = System.Windows.Media.Color.FromArgb(dColor.A, dColor.R, dColor.G, dColor.B);
             AuthorLabel.Foreground = new SolidColorBrush(mColor);
-            AuthorLabel.FontSize = watchMessagesModel.LabelFontSize;
+            AuthorLabel.FontSize = randomChoice.LabelFontSize;
             MessageLabel.Foreground = new SolidColorBrush(mColor);
-            MessageLabel.FontSize = watchMessagesModel.LabelFontSize;
+            MessageLabel.FontSize = randomChoice.LabelFontSize;
 
-            TestMediaElement.Source = new Uri(watchMessagesModel.MediaFile);
-            TestMediaElement.Volume = watchMessagesModel.Volume / 100;
+            TestMediaElement.Source = new Uri(randomChoice.MediaFile);
+            TestMediaElement.Volume = randomChoice.Volume / 100;
             AuthorLabel.Content = "Author";
             MessageLabel.Content = "Message";
         }

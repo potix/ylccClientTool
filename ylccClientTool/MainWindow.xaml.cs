@@ -25,7 +25,8 @@ namespace ylccClientTool
     {
 
         private CommonModel _commonModel = new CommonModel();
-        private WatchMessagesModel _watchMessagesModel = new WatchMessagesModel();        
+        private WatchMessagesModel _watchMessagesModel = new WatchMessagesModel();
+        private RandomChoiceModel _randomChoiceModel = new RandomChoiceModel();
 
         public MainWindow()
         {
@@ -43,7 +44,17 @@ namespace ylccClientTool
             WatchMessagesMediaWidthTextBox.DataContext = _watchMessagesModel;
             WatchMessagesMediaHeightTextBox.DataContext = _watchMessagesModel;
             WatchMessagesLabelForeground.DataContext = _watchMessagesModel;
+            RandomChoiceLabelForegroundBorder.DataContext = _watchMessagesModel;
             WatchMessagesLabelFontSize.DataContext = _watchMessagesModel;
+
+            RandomChoiceMediaTextBox.DataContext = _randomChoiceModel;
+            RandomChoiceVolumeSlider.DataContext = _randomChoiceModel;
+            RandomChoiceVolumeLabel.DataContext = _randomChoiceModel;
+            RandomChoiceMediaWidthTextBox.DataContext = _randomChoiceModel;
+            RandomChoiceHeightTextBox.DataContext = _randomChoiceModel;
+            RandomChoiceLabelForeground.DataContext = _randomChoiceModel;
+            RandomChoiceLabelForegroundBorder.DataContext = _randomChoiceModel;
+            RandomChoiceLabelFontSize.DataContext = _randomChoiceModel;
         }
 
         private void AddWatchMessageClick(object sender, EventArgs e)
@@ -98,12 +109,25 @@ namespace ylccClientTool
 
         private void RandomChoiceSelectMedia(object sender, EventArgs e)
         {
+            OpenFileDialog dialog = new OpenFileDialog();
 
+            // ファイルの種類を設定
+            dialog.Filter = "media file (*.*)|*.*";
+            // ダイアログを表示する
+            if (dialog.ShowDialog() == true)
+            {
+                _randomChoiceModel.MediaFile = dialog.FileName;
+            }
         }
 
         private void RandomChoiceTestMedia(object sender, EventArgs e)
         {
-
+            if (RandomChoiceMediaTextBox.Text == null | RandomChoiceMediaTextBox.Text == "")
+            {
+                return;
+            }
+            MediaTestWindow window = new MediaTestWindow(_commonModel, _randomChoiceModel);
+            window.Show();
         }
 
         private void RandomChoiceStart(object sender, EventArgs e)
