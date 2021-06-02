@@ -30,6 +30,7 @@ namespace ylccClientTool
         private CancellationTokenSource _cancelSource;
         private CancellationToken _cancelToken;
         private Collection<TextBox> _textBoxes = new Collection<TextBox>();
+        private bool _isCloseRequested = false;
 
         public GroupingWindow(CommonModel commonModel, GroupingModel groupingModel)
         {
@@ -64,7 +65,6 @@ namespace ylccClientTool
             _cancelToken = _cancelSource.Token;
             try
             {
-                Debug.Print("start 1");
                 if (_commonModel.IsInsecure)
                 {
                     AppContext.SetSwitch("System.Net.Http.SocketsHttpHandler.Http2UnencryptedSupport", true);
@@ -87,15 +87,13 @@ namespace ylccClientTool
                     sb.Append("VideoId:" + _commonModel.VideoId + "\n");
                     sb.Append("Reason:" + startGroupingActiveLiveChatResponse.Status.Message + "\n");
                     MessageBox.Show(sb.ToString());
-                    this.Close();
+                    WindowClose();
                     return;
                 }
-                Debug.Print("poll 1");
                 PollGroupingActiveLiveChatRequest pollGroupingActiveLiveChatRequest = _protocol.BuildPollGroupingActiveLiveChatRequest(startGroupingActiveLiveChatResponse.GroupingId);
                 AsyncServerStreamingCall<PollGroupingActiveLiveChatResponse> call = client.PollGroupingActiveLiveChat(pollGroupingActiveLiveChatRequest, cancellationToken: _cancelToken);
                 while (await call.ResponseStream.MoveNext())
                 {
-                    Debug.Print("poll 2");
                     PollGroupingActiveLiveChatResponse response = call.ResponseStream.Current;
                     if (response.Status.Code != Code.Success)
                     {
@@ -105,16 +103,11 @@ namespace ylccClientTool
                         sb.Append("VideoId:" + _commonModel.VideoId + "\n");
                         sb.Append("Reason:" + response.Status.Message + "\n");
                         MessageBox.Show(sb.ToString());
-                        this.Close();
-                        break;
+                        WindowClose();
+                        return;
                     }
                     if (response.GroupingActiveLiveChatMessage != null)
                     {
-                        Debug.Print("Label " + response.GroupingActiveLiveChatMessage.Label);
-                        Debug.Print("Choice " + response.GroupingActiveLiveChatMessage.Choice);
-                        Debug.Print("GroupIdx " + response.GroupingActiveLiveChatMessage.GroupIdx);
-                        Debug.Print("AuthorDisplayName " + response.GroupingActiveLiveChatMessage.ActiveLiveChatMessage.AuthorDisplayName);
-                        Debug.Print("DisplayMessage " + response.GroupingActiveLiveChatMessage.ActiveLiveChatMessage.DisplayMessage);
                         // delete custom emoji
                         string noCustomDisplayMessage = System.Text.RegularExpressions.Regex.Replace(response.GroupingActiveLiveChatMessage.ActiveLiveChatMessage.DisplayMessage, ":[^:]+?:", "").Trim();
                         if (noCustomDisplayMessage == "")
@@ -131,6 +124,7 @@ namespace ylccClientTool
                     }
                 }
                 await channel.ShutdownAsync();
+                WindowClose();
             }
             catch (Grpc.Core.RpcException ex)
             {
@@ -142,7 +136,8 @@ namespace ylccClientTool
                     sb.Append("VideoId:" + _commonModel.VideoId + "\n");
                     sb.Append("Reason:" + ex.Message + "\n");
                     MessageBox.Show(sb.ToString());
-                    this.Close();
+                    WindowClose();
+                    return;
                 }
             }
             finally
@@ -223,9 +218,15 @@ namespace ylccClientTool
             return textBox;
         }
 
+        private void WindowClose()
+        {
+            _isCloseRequested = true;
+            this.Close();
+        }
+
         private void WindowClosing(object sender, CancelEventArgs e)
         {
-            if (_cancelSource != null && !_cancelToken.IsCancellationRequested)
+            if (!_isCloseRequested && _cancelSource != null && !_cancelToken.IsCancellationRequested)
             {
                 _cancelSource.Cancel();
             }

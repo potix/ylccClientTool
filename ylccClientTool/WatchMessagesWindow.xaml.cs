@@ -35,6 +35,7 @@ namespace ylccClientTool
         private CancellationToken _cancelToken;
         private Thread _updateThread;
         private BlockingCollection<ActiveLiveChatMessage> _queue = new BlockingCollection<ActiveLiveChatMessage>();
+        private bool _isCloseRequested = false;
 
         public WatchMessagesWindow(CommonModel commonModel, WatchMessagesModel watchMessagesModel)
         {
@@ -85,7 +86,7 @@ namespace ylccClientTool
                     sb.Append("VideoId:" + _commonModel.VideoId + "\n");
                     sb.Append("Reason:" + startCollectionActiveLiveChatResponse.Status.Message + "\n");
                     MessageBox.Show(sb.ToString());
-                    this.Close();
+                    WindowClose();
                     return;
                 }
                 PollActiveLiveChatRequest pollActiveLiveChatRequest = _protocol.BuildPollActiveLiveChatRequest(_commonModel.VideoId);
@@ -101,8 +102,8 @@ namespace ylccClientTool
                         sb.Append("VideoId:" + _commonModel.VideoId + "\n");
                         sb.Append("Reason:" + response.Status.Message + "\n");
                         MessageBox.Show(sb.ToString());
-                        this.Close();
-                        break;
+                        WindowClose();
+                        return;
                     }
                     if (response.ActiveLiveChatMessages == null)
                     {
@@ -137,6 +138,7 @@ namespace ylccClientTool
                     }
                 }
                 await channel.ShutdownAsync();
+                WindowClose();
             }
             catch (Grpc.Core.RpcException ex)
             {
@@ -148,7 +150,7 @@ namespace ylccClientTool
                     sb.Append("VideoId:" + _commonModel.VideoId + "\n");
                     sb.Append("Reason:" + ex.Message + "\n");
                     MessageBox.Show(sb.ToString());
-                    this.Close();
+                    WindowClose();
                 }
             }
             finally
@@ -187,11 +189,15 @@ namespace ylccClientTool
                 }));
             }
         }
-
+        private void WindowClose()
+        {
+            _isCloseRequested = true;
+            this.Close();
+        }
         private void WindowClosing(object sender, CancelEventArgs e)
         {
             _queue.Add(null);
-            if (_cancelSource != null && !_cancelToken.IsCancellationRequested) { 
+            if (!_isCloseRequested && _cancelSource != null && !_cancelToken.IsCancellationRequested) { 
                 _cancelSource.Cancel();
             }
         }

@@ -31,7 +31,8 @@ namespace ylccClientTool
         private CancellationToken _cancelToken;
         private object _lock = new object();
         private bool _getMessageRequest;
-        private Random rand = new Random();
+        private Random _rand = new Random();
+        private bool _isCloseRequested = false;
 
         public RandomChoiceWindow(CommonModel commonModel, RandomChoiceModel randomChoiceModel)
         {
@@ -80,7 +81,7 @@ namespace ylccClientTool
                     sb.Append("VideoId:" + _commonModel.VideoId + "\n");
                     sb.Append("Reason:" + startCollectionActiveLiveChatResponse.Status.Message + "\n");
                     MessageBox.Show(sb.ToString());
-                    this.Close();
+                    WindowClose();
                     return;
                 }
                 PollActiveLiveChatRequest pollActiveLiveChatRequest = _protocol.BuildPollActiveLiveChatRequest(_commonModel.VideoId);
@@ -96,8 +97,8 @@ namespace ylccClientTool
                         sb.Append("VideoId:" + _commonModel.VideoId + "\n");
                         sb.Append("Reason:" + response.Status.Message + "\n");
                         MessageBox.Show(sb.ToString());
-                        this.Close();
-                        break;
+                        WindowClose();
+                        return;
                     }
                     if (response.ActiveLiveChatMessages == null)
                     {
@@ -134,11 +135,12 @@ namespace ylccClientTool
                     }
                     if (getMessageRequest)
                     {
-                        int idx = rand.Next(candidateMessages.Count);
+                        int idx = _rand.Next(candidateMessages.Count);
                         WindowUpdate(candidateMessages[idx]);
                     }
                 }
                 await channel.ShutdownAsync();
+                WindowClose();
             }
             catch (Grpc.Core.RpcException ex)
             {
@@ -150,7 +152,7 @@ namespace ylccClientTool
                     sb.Append("VideoId:" + _commonModel.VideoId + "\n");
                     sb.Append("Reason:" + ex.Message + "\n");
                     MessageBox.Show(sb.ToString());
-                    this.Close();
+                    WindowClose();                    
                 }
             }
             finally
@@ -186,10 +188,14 @@ namespace ylccClientTool
                 _getMessageRequest = true;
             }
         }
-
+        private void WindowClose()
+        {
+            _isCloseRequested = true;
+            this.Close();
+        }
         private void WindowClosing(object sender, CancelEventArgs e)
         {
-            if (_cancelSource != null && !_cancelToken.IsCancellationRequested)
+            if (!_isCloseRequested && _cancelSource != null && !_cancelToken.IsCancellationRequested)
             {
                 _cancelSource.Cancel();
             }
