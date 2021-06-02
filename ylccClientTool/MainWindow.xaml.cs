@@ -28,6 +28,7 @@ namespace ylccClientTool
         private WatchMessagesModel _watchMessagesModel = new WatchMessagesModel();
         private RandomChoiceModel _randomChoiceModel = new RandomChoiceModel();
         private GroupingModel _groupingModel = new GroupingModel();
+        private WordCloudModel _wordCloudModel = new WordCloudModel();
 
         public MainWindow()
         {
@@ -44,7 +45,7 @@ namespace ylccClientTool
             WatchMessagesMediaTextBox.DataContext = _watchMessagesModel;
             WatchMessagesMediaWidthTextBox.DataContext = _watchMessagesModel;
             WatchMessagesMediaHeightTextBox.DataContext = _watchMessagesModel;
-            WatchMessagesLabelForeground.DataContext = _watchMessagesModel;
+            WatchMessagesLabelForegroundTextBox.DataContext = _watchMessagesModel;
             RandomChoiceLabelForegroundBorder.DataContext = _watchMessagesModel;
             WatchMessagesLabelFontSize.DataContext = _watchMessagesModel;
 
@@ -53,7 +54,7 @@ namespace ylccClientTool
             RandomChoiceVolumeLabel.DataContext = _randomChoiceModel;
             RandomChoiceMediaWidthTextBox.DataContext = _randomChoiceModel;
             RandomChoiceHeightTextBox.DataContext = _randomChoiceModel;
-            RandomChoiceLabelForeground.DataContext = _randomChoiceModel;
+            RandomChoiceLabelForegroundTextBox.DataContext = _randomChoiceModel;
             RandomChoiceLabelForegroundBorder.DataContext = _randomChoiceModel;
             RandomChoiceLabelFontSize.DataContext = _randomChoiceModel;
 
@@ -68,9 +69,29 @@ namespace ylccClientTool
             GroupingBoxBorderColorBorder.DataContext = _groupingModel;
             GroupingGroupingFontSizeTextBox.DataContext = _groupingModel;
             GroupingPaddingTextBox.DataContext = _groupingModel;
+
+            WordCloudMessageLimitTextBox.DataContext = _wordCloudModel;
+            WordCloudFontMaxSizeTextBox.DataContext = _wordCloudModel;
+            WordCloudFontMinSizeTextBox.DataContext = _wordCloudModel;
+            WordCloudWidthTextBox.DataContext = _wordCloudModel;
+            WordCloudHeightTextBox.DataContext = _wordCloudModel;
+            WordCloudImageBackgroundColorTextBox.DataContext = _wordCloudModel;
+            WordCloudImageBackgroundColorBorder.DataContext = _wordCloudModel;
+            WordCloudFontColorsDataGrid.DataContext = _wordCloudModel;
+
+
         }
 
-        private void AddWatchMessageClick(object sender, EventArgs e)
+        private void LoadConfigFile(object sender, EventArgs e)
+        {
+
+        }
+        private void SaveConfigFile(object sender, EventArgs e)
+        {
+
+        }
+
+        private void WatchMessagesAddWatchMessageClick(object sender, EventArgs e)
         {
             if (WatchMessageTextBox.Text == null || WatchMessageTextBox.Text == "")
             {
@@ -79,8 +100,7 @@ namespace ylccClientTool
             _watchMessagesModel.WatchMessages.Add(new WatchMessage() { Message = WatchMessageTextBox.Text, Active = true, Author = "" });
             WatchMessageTextBox.Text = "";
         }
-
-        private void WatchMessageRemove(object sender, EventArgs e)
+        private void WatchMessagesRemoveWatchMessageClick(object sender, EventArgs e)
         {
             if (WatchMessagesDataGrid.SelectedIndex == -1)
             {
@@ -151,7 +171,7 @@ namespace ylccClientTool
         }
 
 
-        private void AddGroupingChoiceClick(object sender, EventArgs e)
+        private void GroupingAddChoiceClick(object sender, EventArgs e)
         {
             if (GroupingChoiceTextBox.Text == null || GroupingChoiceTextBox.Text == "")
             {
@@ -161,7 +181,7 @@ namespace ylccClientTool
             GroupingChoiceTextBox.Text = "";
         }
 
-        private void GroupingChoiceRemove(object sender, EventArgs e)
+        private void GroupingRemoveChoiceClick(object sender, EventArgs e)
         {
             if (GroupingChoicesDataGrid.SelectedIndex == -1)
             {
@@ -178,6 +198,54 @@ namespace ylccClientTool
                 return;
             }
             GroupingWindow window = new GroupingWindow(_commonModel, _groupingModel);
+            window.Show();
+            window.Start();
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        private void WordCloudAddFontColorClick(object sender, EventArgs e)
+        {
+            if (WordCloudFontColorTextBox.Text == null || WordCloudFontColorTextBox.Text == "")
+            {
+                return;
+            }
+            _wordCloudModel.FontColors.Add(new FontColor() { Color = WordCloudFontColorTextBox.Text });
+            WatchMessageTextBox.Text = "";
+        }
+
+        private void WordCloudRemoveFontColorClick(object sender, EventArgs e)
+        {
+            if (WordCloudFontColorsDataGrid.SelectedIndex == -1)
+            {
+                return;
+            }
+            _wordCloudModel.FontColors.Remove(_wordCloudModel.FontColors[WordCloudFontColorsDataGrid.SelectedIndex]);
+            WordCloudFontColorsDataGrid.SelectedIndex = -1;
+        }
+
+        private void WordCloudStart(object sender, EventArgs e)
+        {
+            WordCloudWindow window = new WordCloudWindow(_commonModel, _wordCloudModel);
             window.Show();
             window.Start();
         }

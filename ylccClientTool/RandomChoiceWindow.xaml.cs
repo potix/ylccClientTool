@@ -24,9 +24,9 @@ namespace ylccClientTool
     /// </summary>
     public partial class RandomChoiceWindow : Window
     {
+        private readonly YlccProtocol _protocol = new YlccProtocol();
         private CommonModel _commonModel;
         private RandomChoiceModel _randomChoiceModel;
-        private YlccProtocol _protocol = new YlccProtocol();
         private CancellationTokenSource _cancelSource;
         private CancellationToken _cancelToken;
         private object _lock = new object();

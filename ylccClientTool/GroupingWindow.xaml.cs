@@ -24,9 +24,9 @@ namespace ylccClientTool
     /// </summary>
     public partial class GroupingWindow : Window
     {
+        private readonly YlccProtocol _protocol = new YlccProtocol();
         private CommonModel _commonModel;
         private GroupingModel _groupingModel;
-        private YlccProtocol _protocol = new YlccProtocol();
         private CancellationTokenSource _cancelSource;
         private CancellationToken _cancelToken;
         private Collection<TextBox> _textBoxes = new Collection<TextBox>();

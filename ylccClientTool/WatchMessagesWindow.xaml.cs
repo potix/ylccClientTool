@@ -28,9 +28,9 @@ namespace ylccClientTool
     /// </summary>
     public partial class WatchMessagesWindow : Window
     {
+        private readonly YlccProtocol _protocol = new YlccProtocol();
         private CommonModel _commonModel;
         private WatchMessagesModel _watchMessagesModel;
-        private YlccProtocol _protocol = new YlccProtocol();
         private CancellationTokenSource _cancelSource;
         private CancellationToken _cancelToken;
         private Thread _updateThread;
