@@ -30,9 +30,9 @@ namespace ylccClientTool
     {
         private CommonModel _commonModel;
         private WatchMessagesModel _watchMessagesModel;
-        private YlccProtocol protocol = new YlccProtocol();
-        private CancellationTokenSource cancelSource;
-        private CancellationToken cancelToken;
+        private YlccProtocol _protocol = new YlccProtocol();
+        private CancellationTokenSource _cancelSource;
+        private CancellationToken _cancelToken;
         private Thread _updateThread;
         private BlockingCollection<ActiveLiveChatMessage> _queue = new BlockingCollection<ActiveLiveChatMessage>();
 
@@ -60,13 +60,13 @@ namespace ylccClientTool
             MessageLabel.FontSize = watchMessagesModel.LabelFontSize;
         }
 
-        public async void WatchMessage()
+        public async void Start()
         {
             _updateThread = new Thread(WindowUpdate);
             _updateThread.Start();
 
-            cancelSource = new CancellationTokenSource();
-            cancelToken = cancelSource.Token;
+            _cancelSource = new CancellationTokenSource();
+            _cancelToken = _cancelSource.Token;
             try
             {
                 if (_commonModel.IsInsecure)
@@ -75,8 +75,8 @@ namespace ylccClientTool
                 }
                 GrpcChannel channel = GrpcChannel.ForAddress(_commonModel.Uri);
                 ylcc.ylccClient client = new ylcc.ylccClient(channel);
-                StartCollectionActiveLiveChatRequest startCollectionActiveLiveChatRequest = protocol.BuildStartCollectionActiveLiveChatRequest(_commonModel.VideoId);
-                StartCollectionActiveLiveChatResponse startCollectionActiveLiveChatResponse = await client.StartCollectionActiveLiveChatAsync(startCollectionActiveLiveChatRequest, cancellationToken: cancelToken);
+                StartCollectionActiveLiveChatRequest startCollectionActiveLiveChatRequest = _protocol.BuildStartCollectionActiveLiveChatRequest(_commonModel.VideoId);
+                StartCollectionActiveLiveChatResponse startCollectionActiveLiveChatResponse = await client.StartCollectionActiveLiveChatAsync(startCollectionActiveLiveChatRequest, cancellationToken: _cancelToken);
                 if (startCollectionActiveLiveChatResponse.Status.Code != Code.Success && startCollectionActiveLiveChatResponse.Status.Code != Code.InProgress)
                 {
                     StringBuilder sb = new StringBuilder();
@@ -88,8 +88,8 @@ namespace ylccClientTool
                     this.Close();
                     return;
                 }
-                PollActiveLiveChatRequest pollActiveLiveChatRequest = protocol.BuildPollActiveLiveChatRequest(_commonModel.VideoId);
-                AsyncServerStreamingCall<PollActiveLiveChatResponse> call = client.PollActiveLiveChat(pollActiveLiveChatRequest, cancellationToken: cancelToken);
+                PollActiveLiveChatRequest pollActiveLiveChatRequest = _protocol.BuildPollActiveLiveChatRequest(_commonModel.VideoId);
+                AsyncServerStreamingCall<PollActiveLiveChatResponse> call = client.PollActiveLiveChat(pollActiveLiveChatRequest, cancellationToken: _cancelToken);
                 while (await call.ResponseStream.MoveNext())
                 {
                     PollActiveLiveChatResponse response = call.ResponseStream.Current;
@@ -118,6 +118,12 @@ namespace ylccClientTool
                         {
                             continue;
                         }
+                        // delete cutom emoji
+                        activeLiveChatMessage.DisplayMessage = System.Text.RegularExpressions.Regex.Replace(activeLiveChatMessage.DisplayMessage, ":[^:]+?:", "").Trim();
+                        if (activeLiveChatMessage.DisplayMessage == "")
+                        {
+                            continue;
+                        }
                         foreach (WatchMessage watchMessage in _watchMessagesModel.WatchMessages)
                         {
                             if (watchMessage.Active && activeLiveChatMessage.DisplayMessage.Contains(watchMessage.Message))
@@ -127,7 +133,6 @@ namespace ylccClientTool
                                 watchMessage.Active = false;
                                 break;
                             }
-
                         }
                     }
                 }
@@ -135,7 +140,7 @@ namespace ylccClientTool
             }
             catch (Grpc.Core.RpcException ex)
             {
-                if (!cancelToken.IsCancellationRequested)
+                if (!_cancelToken.IsCancellationRequested)
                 {
                     StringBuilder sb = new StringBuilder();
                     sb.Append("通信エラー\n");
@@ -148,7 +153,7 @@ namespace ylccClientTool
             }
             finally
             {
-                cancelSource.Dispose();
+                _cancelSource.Dispose();
             }
         }
 
@@ -186,8 +191,8 @@ namespace ylccClientTool
         private void WindowClosing(object sender, CancelEventArgs e)
         {
             _queue.Add(null);
-            if (!cancelToken.IsCancellationRequested) { 
-                cancelSource.Cancel();
+            if (_cancelSource != null && !_cancelToken.IsCancellationRequested) { 
+                _cancelSource.Cancel();
             }
         }
 

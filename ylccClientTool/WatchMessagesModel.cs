@@ -8,10 +8,8 @@ using System.Text;
 namespace ylccClientTool
 {
 
-    public class WatchMessage : INotifyPropertyChanged
-    {
-        public event PropertyChangedEventHandler PropertyChanged;
-
+    public class WatchMessage : BaseModel
+    {    
         private string message;
         public string Message {
             get 
@@ -50,11 +48,6 @@ namespace ylccClientTool
                 this.author = value;
                 OnPropertyChanged("Author");
             }
-        }
-
-        protected void OnPropertyChanged([CallerMemberName] string name = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
     }
 

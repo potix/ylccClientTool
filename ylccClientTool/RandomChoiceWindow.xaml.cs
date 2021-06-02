@@ -26,9 +26,9 @@ namespace ylccClientTool
     {
         private CommonModel _commonModel;
         private RandomChoiceModel _randomChoiceModel;
-        private YlccProtocol protocol = new YlccProtocol();
-        private CancellationTokenSource cancelSource;
-        private CancellationToken cancelToken;
+        private YlccProtocol _protocol = new YlccProtocol();
+        private CancellationTokenSource _cancelSource;
+        private CancellationToken _cancelToken;
         private object _lock = new object();
         private bool _getMessageRequest;
         private Random rand = new Random();
@@ -60,8 +60,8 @@ namespace ylccClientTool
 
         public async void Start()
         {
-            cancelSource = new CancellationTokenSource();
-            cancelToken = cancelSource.Token;
+            _cancelSource = new CancellationTokenSource();
+            _cancelToken = _cancelSource.Token;
             try
             {
                 if (_commonModel.IsInsecure)
@@ -70,8 +70,8 @@ namespace ylccClientTool
                 }
                 GrpcChannel channel = GrpcChannel.ForAddress(_commonModel.Uri);
                 ylcc.ylccClient client = new ylcc.ylccClient(channel);
-                StartCollectionActiveLiveChatRequest startCollectionActiveLiveChatRequest = protocol.BuildStartCollectionActiveLiveChatRequest(_commonModel.VideoId);
-                StartCollectionActiveLiveChatResponse startCollectionActiveLiveChatResponse = await client.StartCollectionActiveLiveChatAsync(startCollectionActiveLiveChatRequest, cancellationToken: cancelToken);
+                StartCollectionActiveLiveChatRequest startCollectionActiveLiveChatRequest = _protocol.BuildStartCollectionActiveLiveChatRequest(_commonModel.VideoId);
+                StartCollectionActiveLiveChatResponse startCollectionActiveLiveChatResponse = await client.StartCollectionActiveLiveChatAsync(startCollectionActiveLiveChatRequest, cancellationToken: _cancelToken);
                 if (startCollectionActiveLiveChatResponse.Status.Code != Code.Success && startCollectionActiveLiveChatResponse.Status.Code != Code.InProgress)
                 {
                     StringBuilder sb = new StringBuilder();
@@ -83,8 +83,8 @@ namespace ylccClientTool
                     this.Close();
                     return;
                 }
-                PollActiveLiveChatRequest pollActiveLiveChatRequest = protocol.BuildPollActiveLiveChatRequest(_commonModel.VideoId);
-                AsyncServerStreamingCall<PollActiveLiveChatResponse> call = client.PollActiveLiveChat(pollActiveLiveChatRequest, cancellationToken: cancelToken);
+                PollActiveLiveChatRequest pollActiveLiveChatRequest = _protocol.BuildPollActiveLiveChatRequest(_commonModel.VideoId);
+                AsyncServerStreamingCall<PollActiveLiveChatResponse> call = client.PollActiveLiveChat(pollActiveLiveChatRequest, cancellationToken: _cancelToken);
                 while (await call.ResponseStream.MoveNext())
                 {
                     PollActiveLiveChatResponse response = call.ResponseStream.Current;
@@ -114,6 +114,12 @@ namespace ylccClientTool
                         {
                             continue;
                         }
+                        // delete cutom emoji
+                        activeLiveChatMessage.DisplayMessage = System.Text.RegularExpressions.Regex.Replace(activeLiveChatMessage.DisplayMessage, ":[^:]+?:", "").Trim();
+                        if (activeLiveChatMessage.DisplayMessage == "")
+                        {
+                            continue;
+                        }
                         candidateMessages.Add(activeLiveChatMessage);
                     }
                     if (candidateMessages.Count == 0)
@@ -136,7 +142,7 @@ namespace ylccClientTool
             }
             catch (Grpc.Core.RpcException ex)
             {
-                if (!cancelToken.IsCancellationRequested)
+                if (!_cancelToken.IsCancellationRequested)
                 {
                     StringBuilder sb = new StringBuilder();
                     sb.Append("通信エラー\n");
@@ -149,7 +155,7 @@ namespace ylccClientTool
             }
             finally
             {
-                cancelSource.Dispose();
+                _cancelSource.Dispose();
             }
         }
 
@@ -183,9 +189,9 @@ namespace ylccClientTool
 
         private void WindowClosing(object sender, CancelEventArgs e)
         {
-            if (!cancelToken.IsCancellationRequested)
+            if (_cancelSource != null && !_cancelToken.IsCancellationRequested)
             {
-                cancelSource.Cancel();
+                _cancelSource.Cancel();
             }
         }
     }

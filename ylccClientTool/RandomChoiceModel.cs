@@ -6,10 +6,8 @@ using System.Text;
 
 namespace ylccClientTool
 {
-    public class RandomChoiceModel : INotifyPropertyChanged
-    {
-        public event PropertyChangedEventHandler PropertyChanged;
-
+    public class RandomChoiceModel : BaseModel
+    {     
         private string mediaFile;
         public string MediaFile
         {
@@ -39,9 +37,11 @@ namespace ylccClientTool
         }
 
         public int MediaWidth { get; set; }
+
         public int MediaHeight { get; set; }
 
         public string LabelForeground { get; set; }
+
         public Double LabelFontSize { get; set; }
 
         public RandomChoiceModel()
@@ -51,11 +51,6 @@ namespace ylccClientTool
             MediaHeight = 400;
             LabelForeground = "#FFFFFFFF";
             LabelFontSize = 20;
-        }
-
-        protected void OnPropertyChanged([CallerMemberName] string name = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
     }
 }

@@ -5,9 +5,13 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ylccClientTool"
         mc:Ignorable="d"
-        Title="ylccClientTool" Height="720" Width="800">
+        Title="ylccClientTool" Height="780" Width="800">
     <Grid>
-        <StackPanel Orientation="Vertical" HorizontalAlignment="Center">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="305*"/>
+            <RowDefinition Height="399*"/>
+        </Grid.RowDefinitions>
+        <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Grid.RowSpan="2">
             <StackPanel Orientation="Horizontal">
                 <Label Content="VideoId" Margin="5" Width="120"/>
                 <TextBox x:Name="VideoIdTextBox" Text="{Binding VideoId}" Width="100" Margin="5"/>
@@ -33,12 +37,12 @@
                             <StackPanel Orientation="Horizontal">
                                 <Label Content="watch message" HorizontalAlignment="Left" VerticalContentAlignment="Center"  Margin="5"/>
                                 <TextBox x:Name="WatchMessageTextBox" Text="" Width="400"  Margin="5"/>
-                                <Button Content="追加"  Click="AddWatchMessageClick" Margin="5"/>
+                                <Button Content="add"  Click="AddWatchMessageClick" Margin="5"/>
                             </StackPanel>
                             <StackPanel Orientation="Vertical" HorizontalAlignment="Left">
                                 <DataGrid Name="WatchMessagesDataGrid" AutoGenerateColumns="False"  Width="640"  Height="200" CanUserAddRows="False"  CanUserSortColumns="False" ItemsSource="{Binding WatchMessages}" Margin="5" >
                                     <DataGrid.Columns>
-                                        <DataGridTextColumn Width="300"  Header="watch messages" Binding="{Binding Message}"/>
+                                        <DataGridTextColumn Width="300"  Header="watch messages" Binding="{Binding Message, Mode=TwoWay}"/>
                                         <DataGridTemplateColumn Width="200" Header="author">
                                             <DataGridTemplateColumn.CellTemplate>
                                                 <DataTemplate>
@@ -128,6 +132,63 @@
                             </StackPanel>
                             <StackPanel Orientation="Horizontal">
                                 <Button Content="Start" Width="100" Margin="5" Click="RandomChoiceStart" />
+                            </StackPanel>
+                        </StackPanel>
+                    </TabItem>
+                    <TabItem x:Name="Grouping" Header="Grouping">
+                        <StackPanel  Orientation="Vertical" HorizontalAlignment="Left">
+                            <StackPanel Orientation="Horizontal">
+                                <Label Content="Choice" Height="40" Margin="5" />
+                                <TextBox x:Name="GroupingChoiceTextBox" AcceptsReturn="True" TextWrapping="Wrap" Width="200" Height="40" Margin="5"  />
+                                <Button Content="add" VerticalAlignment="Top" Click="AddGroupingChoiceClick" Height="40" Margin="5"  />
+                            </StackPanel>
+                            <StackPanel Orientation="Vertical">
+                                <DataGrid x:Name="GroupingChoicesDataGrid" AutoGenerateColumns="False" HorizontalAlignment="Left"  Width="600" Height="200"  VerticalAlignment="Top" CanUserAddRows="False"  CanUserSortColumns="False" ItemsSource="{Binding GroupingChoices}" >
+                                    <DataGrid.Columns>
+                                        <DataGridTextColumn  Width="500"  Header="choice" Binding="{Binding Text, Mode=TwoWay}" />
+                                        <DataGridTemplateColumn Width="*" Header="operation">
+                                            <DataGridTemplateColumn.CellTemplate>
+                                                <DataTemplate>
+                                                    <Button Content="remove" Click="GroupingChoiceRemove" />
+                                                </DataTemplate>
+                                            </DataGridTemplateColumn.CellTemplate>
+                                        </DataGridTemplateColumn>
+                                    </DataGrid.Columns>
+                                </DataGrid>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <Label Content="Width" Width="100" Margin="5" />
+                                <TextBox x:Name="GroupingWidthTextBox" Text="{Binding Width}"  Width="100"  Margin="5"  PreviewTextInput="IntPreviewTextInput" CommandManager.PreviewExecuted="IntPreviewExecuted"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <Label Content="Height" Width="100" Margin="5" />
+                                <TextBox x:Name="GroupingHeightTextBox" Text="{Binding Height}"  Width="100"  Margin="5"  PreviewTextInput="IntPreviewTextInput" CommandManager.PreviewExecuted="IntPreviewExecuted"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <Label Content="BoxForeground" Width="100" Margin="5" />
+                                <TextBox x:Name="GroupingBoxForegroundColorTextBox" Text="{Binding BoxForegroundColor}" Width="100" Margin="5"  PreviewTextInput="ColorPreviewTextInput" CommandManager.PreviewExecuted="ColorPreviewExecuted" />
+                                <Border x:Name="GroupingBoxForegroundColorBorder" Background="{Binding BoxForegroundColor}" BorderBrush="#000000"  BorderThickness="1" Margin="5"  Width="30"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <Label Content="BoxBackground" Width="100" Margin="5" />
+                                <TextBox x:Name="GroupingBoxBackgroundColorTextBox" Text="{Binding BoxBackgroundColor}" TextWrapping="Wrap" Width="100" Margin="5" PreviewTextInput="ColorPreviewTextInput" CommandManager.PreviewExecuted="ColorPreviewExecuted"/>
+                                <Border x:Name="GroupingBoxBackgroundColorBorder" Background="{Binding BoxBackgroundColor}" BorderBrush="#000000"  BorderThickness="1"  Margin="5"  Width="30"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <Label Content="BoxBorderColor" Width="100" Margin="5"/>
+                                <TextBox x:Name="GroupingBoxBorderColorTextBox" Text="{Binding BoxBorderColor}" TextWrapping="Wrap"  Width="100" Margin="5" PreviewTextInput="ColorPreviewTextInput" CommandManager.PreviewExecuted="ColorPreviewExecuted"/>
+                                <Border x:Name="GroupingBoxBorderColorBorder" Background="{Binding BoxBorderColor}" BorderBrush="#000000"  BorderThickness="1"  Margin="5"  Width="30"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <Label Content="GroupingFontSize" Width="100" Margin="5"/>
+                                <TextBox x:Name="GroupingGroupingFontSizeTextBox" Text="{Binding FontSize}"  Width="100"  Margin="5"  PreviewTextInput="IntPreviewTextInput" CommandManager.PreviewExecuted="IntPreviewExecuted" />
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <Label Content="Padding" Width="100" Margin="5" />
+                                <TextBox x:Name="GroupingPaddingTextBox" Text="{Binding Padding}" TextWrapping="Wrap" Width="100" Margin="5" PreviewTextInput="IntPreviewTextInput" CommandManager.PreviewExecuted="IntPreviewExecuted" />
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <Button Content="Start" Width="100" Margin="5" Click="GroupingStart" />
                             </StackPanel>
                         </StackPanel>
                     </TabItem>

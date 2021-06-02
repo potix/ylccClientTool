@@ -27,6 +27,7 @@ namespace ylccClientTool
         private CommonModel _commonModel = new CommonModel();
         private WatchMessagesModel _watchMessagesModel = new WatchMessagesModel();
         private RandomChoiceModel _randomChoiceModel = new RandomChoiceModel();
+        private GroupingModel _groupingModel = new GroupingModel();
 
         public MainWindow()
         {
@@ -55,6 +56,18 @@ namespace ylccClientTool
             RandomChoiceLabelForeground.DataContext = _randomChoiceModel;
             RandomChoiceLabelForegroundBorder.DataContext = _randomChoiceModel;
             RandomChoiceLabelFontSize.DataContext = _randomChoiceModel;
+
+            GroupingChoicesDataGrid.DataContext = _groupingModel;
+            GroupingWidthTextBox.DataContext = _groupingModel;
+            GroupingHeightTextBox.DataContext = _groupingModel;
+            GroupingBoxForegroundColorTextBox.DataContext = _groupingModel;
+            GroupingBoxForegroundColorBorder.DataContext = _groupingModel;
+            GroupingBoxBackgroundColorTextBox.DataContext = _groupingModel;
+            GroupingBoxBackgroundColorBorder.DataContext = _groupingModel;
+            GroupingBoxBorderColorTextBox.DataContext = _groupingModel;
+            GroupingBoxBorderColorBorder.DataContext = _groupingModel;
+            GroupingGroupingFontSizeTextBox.DataContext = _groupingModel;
+            GroupingPaddingTextBox.DataContext = _groupingModel;
         }
 
         private void AddWatchMessageClick(object sender, EventArgs e)
@@ -104,7 +117,7 @@ namespace ylccClientTool
 
             WatchMessagesWindow window = new WatchMessagesWindow(_commonModel, _watchMessagesModel);
             window.Show();
-            window.WatchMessage();
+            window.Start();
         }
 
         private void RandomChoiceSelectMedia(object sender, EventArgs e)
@@ -137,6 +150,37 @@ namespace ylccClientTool
             window.Start();
         }
 
+
+        private void AddGroupingChoiceClick(object sender, EventArgs e)
+        {
+            if (GroupingChoiceTextBox.Text == null || GroupingChoiceTextBox.Text == "")
+            {
+                return;
+            }
+            _groupingModel.GroupingChoices.Add(new GroupingChoice() { Text = GroupingChoiceTextBox.Text });
+            GroupingChoiceTextBox.Text = "";
+        }
+
+        private void GroupingChoiceRemove(object sender, EventArgs e)
+        {
+            if (GroupingChoicesDataGrid.SelectedIndex == -1)
+            {
+                return;
+            }
+            _groupingModel.GroupingChoices.Remove(_groupingModel.GroupingChoices[GroupingChoicesDataGrid.SelectedIndex]);
+            GroupingChoicesDataGrid.SelectedIndex = -1;
+        }
+
+        private void GroupingStart(object sender, EventArgs e)
+        {
+            if (_groupingModel.GroupingChoices.Count == 0)
+            {
+                return;
+            }
+            GroupingWindow window = new GroupingWindow(_commonModel, _groupingModel);
+            window.Show();
+            window.Start();
+        }
 
         private void DoublePreviewTextInput(object sender, TextCompositionEventArgs e)
         {
