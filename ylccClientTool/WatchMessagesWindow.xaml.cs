@@ -137,7 +137,7 @@ namespace ylccClientTool
                         }
                     }
                 }
-                await channel.ShutdownAsync();
+                await channel.ShutdownAsync();                
                 WindowClose();
             }
             catch (Grpc.Core.RpcException ex)
@@ -197,6 +197,7 @@ namespace ylccClientTool
         private void WindowClosing(object sender, CancelEventArgs e)
         {
             _queue.Add(null);
+            _updateThread.Join();
             if (!_isCloseRequested && _cancelSource != null && !_cancelToken.IsCancellationRequested) { 
                 _cancelSource.Cancel();
             }

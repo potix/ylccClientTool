@@ -7,6 +7,7 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading;
+using System.Timers;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -34,6 +35,8 @@ namespace ylccClientTool
         private int _boxWidth;
         private int _boxHeight;
         private string _voteId;
+        private System.Timers.Timer _timer;
+
 
         private int countDown;
         public int CountDown
@@ -101,7 +104,7 @@ namespace ylccClientTool
             int windowWidth = (_boxWidth * _maxCols) + (voteModel.Padding * (_maxCols - 1)) + (voteModel.Padding * 2);
             int windowHeight = (_boxHeight * rows) + (voteModel.Padding * (rows - 1)) + (voteModel.Padding * 2);
             Width = windowWidth + voteModel.Padding;
-            Height = windowHeight + voteModel.Padding;
+            Height = windowHeight + voteModel.Padding + 100;
         }
 
         public async void Start()
@@ -135,7 +138,15 @@ namespace ylccClientTool
                 }
                 _voteId = openVoteResponse.VoteId;
                 _render();
-                CountDown = _voteModel.Duration;
+                CountDown = _voteModel.Duration * 60;
+                _timer = new System.Timers.Timer(1000);
+                _timer.Elapsed += (s, e) => {
+                    if (CountDown > 0)
+                    {
+                        CountDown -= 1;
+                    }
+                };
+                _timer.Start();
             }
             catch (Exception err)
             {
@@ -148,6 +159,7 @@ namespace ylccClientTool
                 Close();
                 return;
             }
+
         }
 
         private async void UpdateDurationClick(object sender, EventArgs e)
@@ -174,7 +186,7 @@ namespace ylccClientTool
                     Close();
                     return;
                 }
-                CountDown = _voteModel.Duration;
+                CountDown = _voteModel.Duration * 60;
             }
             catch (Exception err)
             {
@@ -245,6 +257,11 @@ namespace ylccClientTool
 
         private async void WindowClosing(object sender, CancelEventArgs e)
         {
+            if (_timer != null)
+            {
+                _timer.Stop();
+                _timer.Dispose();
+            }
             try
             {
                 if (_commonModel.IsInsecure)
@@ -278,7 +295,9 @@ namespace ylccClientTool
             }
         }
 
-        public void _render()
+
+
+        private void _render()
         {
             int idx = 0;
             foreach (VoteChoice choice in _voteModel.VoteChoices)
@@ -380,7 +399,7 @@ namespace ylccClientTool
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        protected void OnPropertyChanged([CallerMemberName] string name = null)
+        private void OnPropertyChanged([CallerMemberName] string name = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }

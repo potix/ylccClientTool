@@ -58,9 +58,9 @@
                 </Button>
             </StackPanel>
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                <Label Content="left time" Margin="5" />
-                <Label x:Name="CountDownLabel" Content="{Binding CountDown}" Width="100" Margin="5"/>
-                <Label Content="second" Margin="5" />
+                <Label Content="left time" Foreground="White" Margin="5" />
+                <Label x:Name="CountDownLabel" Content="{Binding CountDown}" Foreground="White" Margin="5"/>
+                <Label Content="second" Foreground="White" Margin="5" />
             </StackPanel>
         </StackPanel>
     </Grid>
