@@ -140,7 +140,7 @@ namespace ylccClientTool
             catch (Exception err)
             {
                 StringBuilder sb = new StringBuilder();
-                sb.Append("エラー\n");
+                sb.Append("通信エラー\n");
                 sb.Append("URI:" + _commonModel.Uri + "\n");
                 sb.Append("VideoId:" + _commonModel.VideoId + "\n");
                 sb.Append("Reason:" + err.Message + "\n");
@@ -168,8 +168,10 @@ namespace ylccClientTool
                     sb.Append("通信エラー\n");
                     sb.Append("URI:" + _commonModel.Uri + "\n");
                     sb.Append("VideoId:" + _commonModel.VideoId + "\n");
+                    sb.Append("VoteId:" + _voteId + "\n");
                     sb.Append("Reason:" + updateVoteDurationResponse.Status.Message + "\n");
                     MessageBox.Show(sb.ToString());
+                    Close();
                     return;
                 }
                 CountDown = _voteModel.Duration;
@@ -177,16 +179,18 @@ namespace ylccClientTool
             catch (Exception err)
             {
                 StringBuilder sb = new StringBuilder();
-                sb.Append("エラー\n");
+                sb.Append("通信エラー\n");
                 sb.Append("URI:" + _commonModel.Uri + "\n");
                 sb.Append("VideoId:" + _commonModel.VideoId + "\n");
+                sb.Append("VoteId:" + _voteId + "\n");
                 sb.Append("Reason:" + err.Message + "\n");
                 MessageBox.Show(sb.ToString());
+                Close();
                 return;
             }
         }
 
-        private async　void GetResultClick(object sender, EventArgs e)
+        private async void GetResultClick(object sender, EventArgs e)
         {
             try
             {
@@ -204,8 +208,10 @@ namespace ylccClientTool
                     sb.Append("通信エラー\n");
                     sb.Append("URI:" + _commonModel.Uri + "\n");
                     sb.Append("VideoId:" + _commonModel.VideoId + "\n");
+                    sb.Append("VoteId:" + _voteId + "\n");
                     sb.Append("Reason:" + getVoteResultResponse.Status.Message + "\n");
                     MessageBox.Show(sb.ToString());
+                    Close();
                     return;
                 }
                 _voteModel.Total = getVoteResultResponse.Total;
@@ -226,12 +232,49 @@ namespace ylccClientTool
             catch (Exception err)
             {
                 StringBuilder sb = new StringBuilder();
-                sb.Append("エラー\n");
+                sb.Append("通信エラー\n");
                 sb.Append("URI:" + _commonModel.Uri + "\n");
                 sb.Append("VideoId:" + _commonModel.VideoId + "\n");
+                sb.Append("VoteId:" + _voteId + "\n");
                 sb.Append("Reason:" + err.Message + "\n");
                 MessageBox.Show(sb.ToString());
+                Close();
                 return;
+            }
+        }
+
+        private async void WindowClosing(object sender, CancelEventArgs e)
+        {
+            try
+            {
+                if (_commonModel.IsInsecure)
+                {
+                    AppContext.SetSwitch("System.Net.Http.SocketsHttpHandler.Http2UnencryptedSupport", true);
+                }
+                GrpcChannel channel = GrpcChannel.ForAddress(_commonModel.Uri);
+                ylcc.ylccClient client = new ylcc.ylccClient(channel);
+                CloseVoteRequest closeVoteRequest = _protocol.BuildCloseVoteRequest(_voteId);
+                CloseVoteResponse closeVoteResponse = await client.CloseVoteAsync(closeVoteRequest);
+                if (closeVoteResponse.Status.Code != Code.Success)
+                {
+                    StringBuilder sb = new StringBuilder();
+                    sb.Append("通信エラー\n");
+                    sb.Append("URI:" + _commonModel.Uri + "\n");
+                    sb.Append("VideoId:" + _commonModel.VideoId + "\n");
+                    sb.Append("VoteId:" + _voteId + "\n");
+                    sb.Append("Reason:" + closeVoteResponse.Status.Message + "\n");
+                    MessageBox.Show(sb.ToString());
+                }
+            }
+            catch (Exception err)
+            {
+                StringBuilder sb = new StringBuilder();
+                sb.Append("通信エラー\n");
+                sb.Append("URI:" + _commonModel.Uri + "\n");
+                sb.Append("VideoId:" + _commonModel.VideoId + "\n");
+                sb.Append("VoteId:" + _voteId + "\n");
+                sb.Append("Reason:" + err.Message + "\n");
+                MessageBox.Show(sb.ToString());
             }
         }
 

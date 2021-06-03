@@ -235,22 +235,14 @@ namespace ylccClientTool
 
         private void VoteStart(object sender, EventArgs e)
         {
-
+            if (_voteModel.VoteChoices.Count == 0)
+            {
+                return;
+            }
+            VoteWindow window = new VoteWindow(_commonModel, _voteModel);
+            window.Show();
+            window.Start();
         }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
         private void WordCloudAddFontColorClick(object sender, EventArgs e)
         {
@@ -274,6 +266,10 @@ namespace ylccClientTool
 
         private void WordCloudStart(object sender, EventArgs e)
         {
+            if (_wordCloudModel.FontColors.Count == 0)
+            {
+                return;
+            }
             WordCloudWindow window = new WordCloudWindow(_commonModel, _wordCloudModel);
             window.Show();
             window.Start();

@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ylccClientTool"
         mc:Ignorable="d"
+        Closing="WindowClosing"
         Title="VoteWindow" Width="600" Height="500">
     <Grid>
         <StackPanel Orientation="Vertical">
