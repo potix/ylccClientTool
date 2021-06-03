@@ -4,6 +4,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading;
 using System.Windows;
@@ -22,29 +23,8 @@ namespace ylccClientTool
     /// VoteWindow.xaml の相互作用ロジック
     /// </summary>
 
-
-
-    public partial class VoteWindow : Window
+    public partial class VoteWindow : Window, INotifyPropertyChanged
     {
-    /*
-        public ObservableCollection<VoteResult> VoteResults { get; set; }
-        VoteResults = null;
-        public bool UpdateResults(int total, ICollection<VoteCount> counts)
-        {
-            if (total == 0)
-            {
-                return false;
-            }
-            Total = total;
-            VoteResults = new ObservableCollection<VoteResult>();
-            foreach (VoteCount count in counts)
-            {
-                VoteResults.Add(new VoteResult() { Count = count.Count, Rate = Math.Ceiling((double)count.Count * 100.0 / (double)total * 10) / 10 });
-            }
-            return true;
-        }
-    */
-
 
         private readonly YlccProtocol _protocol = new YlccProtocol();
         private readonly int _minutes = 60;
@@ -55,9 +35,24 @@ namespace ylccClientTool
         private int _boxHeight;
         private string _voteId;
 
+        private int countDown;
+        public int CountDown
+        {
+            get
+            {
+                return this.countDown;
+            }
+            set
+            {
+                this.countDown = value;
+                OnPropertyChanged("CountDown");
+            }
+        }
+
         public VoteWindow(CommonModel commonModel, VoteModel voteModel)
         {
             InitializeComponent();
+            CountDownLabel.DataContext = this;
 
             _commonModel = commonModel;
             _voteModel = voteModel;
@@ -119,14 +114,13 @@ namespace ylccClientTool
                 }
                 GrpcChannel channel = GrpcChannel.ForAddress(_commonModel.Uri);
                 ylcc.ylccClient client = new ylcc.ylccClient(channel);
-                YlccProtocol protocol = new YlccProtocol();
                 Collection<ylccProtocol.VoteChoice> choices = new Collection<ylccProtocol.VoteChoice>();
                 foreach (var voteChoice in _voteModel.VoteChoices)
                 {
                     int idx = _voteModel.VoteChoices.IndexOf(voteChoice);
                     choices.Add(_protocol.BuildVoteCoice((idx + 1).ToString(), voteChoice.Text));
                 }
-                OpenVoteRequest openVoteRequest = protocol.BuildOpenVoteRequest(_commonModel.VideoId, _commonModel.TargetValue.Target, _voteModel.Duration * _minutes, choices);
+                OpenVoteRequest openVoteRequest = _protocol.BuildOpenVoteRequest(_commonModel.VideoId, _commonModel.TargetValue.Target, _voteModel.Duration * _minutes, choices);
                 OpenVoteResponse openVoteResponse = await client.OpenVoteAsync(openVoteRequest);
                 if (openVoteResponse.Status.Code != Code.Success)
                 {
@@ -141,6 +135,7 @@ namespace ylccClientTool
                 }
                 _voteId = openVoteResponse.VoteId;
                 _render();
+                CountDown = _voteModel.Duration;
             }
             catch (Exception err)
             {
@@ -155,19 +150,90 @@ namespace ylccClientTool
             }
         }
 
+        private async void UpdateDurationClick(object sender, EventArgs e)
+        {
+            try
+            {
+                if (_commonModel.IsInsecure)
+                {
+                    AppContext.SetSwitch("System.Net.Http.SocketsHttpHandler.Http2UnencryptedSupport", true);
+                }
+                GrpcChannel channel = GrpcChannel.ForAddress(_commonModel.Uri);
+                ylcc.ylccClient client = new ylcc.ylccClient(channel);
+                UpdateVoteDurationRequest updateVoteDurationRequest = _protocol.BuildUpdateVoteDurationRequest(_voteId, _voteModel.Duration * _minutes);
+                UpdateVoteDurationResponse updateVoteDurationResponse = await client.UpdateVoteDurationAsync(updateVoteDurationRequest);
+                if (updateVoteDurationResponse.Status.Code != Code.Success)
+                {
+                    StringBuilder sb = new StringBuilder();
+                    sb.Append("通信エラー\n");
+                    sb.Append("URI:" + _commonModel.Uri + "\n");
+                    sb.Append("VideoId:" + _commonModel.VideoId + "\n");
+                    sb.Append("Reason:" + updateVoteDurationResponse.Status.Message + "\n");
+                    MessageBox.Show(sb.ToString());
+                    return;
+                }
+                CountDown = _voteModel.Duration;
+            }
+            catch (Exception err)
+            {
+                StringBuilder sb = new StringBuilder();
+                sb.Append("エラー\n");
+                sb.Append("URI:" + _commonModel.Uri + "\n");
+                sb.Append("VideoId:" + _commonModel.VideoId + "\n");
+                sb.Append("Reason:" + err.Message + "\n");
+                MessageBox.Show(sb.ToString());
+                return;
+            }
+        }
 
-
-
-
-
-
-
-
-
-
-
-
-
+        private async　void GetResultClick(object sender, EventArgs e)
+        {
+            try
+            {
+                if (_commonModel.IsInsecure)
+                {
+                    AppContext.SetSwitch("System.Net.Http.SocketsHttpHandler.Http2UnencryptedSupport", true);
+                }
+                GrpcChannel channel = GrpcChannel.ForAddress(_commonModel.Uri);
+                ylcc.ylccClient client = new ylcc.ylccClient(channel);
+                GetVoteResultRequest getVoteResultRequest = _protocol.BuildGetVoteResultRequest(_voteId);
+                GetVoteResultResponse getVoteResultResponse = await client.GetVoteResultAsync(getVoteResultRequest);
+                if (getVoteResultResponse.Status.Code != Code.Success)
+                {
+                    StringBuilder sb = new StringBuilder();
+                    sb.Append("通信エラー\n");
+                    sb.Append("URI:" + _commonModel.Uri + "\n");
+                    sb.Append("VideoId:" + _commonModel.VideoId + "\n");
+                    sb.Append("Reason:" + getVoteResultResponse.Status.Message + "\n");
+                    MessageBox.Show(sb.ToString());
+                    return;
+                }
+                _voteModel.Total = getVoteResultResponse.Total;
+                if (_voteModel.Total == 0)
+                {
+                    return;
+                }
+                int idx = 0;
+                foreach (VoteCount count in getVoteResultResponse.Counts)
+                {
+                    VoteChoice choice = _voteModel.VoteChoices[idx];
+                    choice.Count = count.Count;
+                    choice.Rate = Math.Ceiling((double)count.Count * 100.0 / (double)_voteModel.Total * 10) / 10;
+                    choice.RateStr = choice.Rate.ToString() + "%";
+                    idx += 1;
+                }
+            }
+            catch (Exception err)
+            {
+                StringBuilder sb = new StringBuilder();
+                sb.Append("エラー\n");
+                sb.Append("URI:" + _commonModel.Uri + "\n");
+                sb.Append("VideoId:" + _commonModel.VideoId + "\n");
+                sb.Append("Reason:" + err.Message + "\n");
+                MessageBox.Show(sb.ToString());
+                return;
+            }
+        }
 
         public void _render()
         {
@@ -267,6 +333,13 @@ namespace ylccClientTool
             textBox.Width = _boxWidth;
             textBox.Height = _boxHeight;
             MainGrid.Children.Add(textBox);
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected void OnPropertyChanged([CallerMemberName] string name = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
     }
 }

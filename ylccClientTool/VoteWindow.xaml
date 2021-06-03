@@ -13,7 +13,7 @@
                 </Grid>
             </StackPanel>
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                <Button Content="時間延長" Margin="10" Foreground="GhostWhite" Click="enkyo" Width="100">
+                <Button Content="time extension" Margin="10" Foreground="GhostWhite" Click="UpdateDurationClick" Width="100">
                     <Button.Template>
                         <ControlTemplate TargetType="Button">
                             <Border Name="ButtonBorder" BorderThickness="4" CornerRadius="10">
@@ -34,7 +34,7 @@
                         </ControlTemplate>
                     </Button.Template>
                 </Button>
-                <Button Content="結果取得" Margin="10" Foreground="GhostWhite" Click="result" Width="100">
+                <Button Content="get result" Margin="10" Foreground="GhostWhite" Click="GetResultClick" Width="100">
                     <Button.Template>
                         <ControlTemplate TargetType="Button">
                             <Border Name="ButtonBorder" BorderThickness="4" CornerRadius="10">
@@ -57,9 +57,9 @@
                 </Button>
             </StackPanel>
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                <Label Content="残り時間" Margin="5" />
-                <Label Content="{Binding CountDown}" Width="100" Margin="5"/>
-                <Label Content="秒" Margin="5" />
+                <Label Content="left time" Margin="5" />
+                <Label x:Name="CountDownLabel" Content="{Binding CountDown}" Width="100" Margin="5"/>
+                <Label Content="second" Margin="5" />
             </StackPanel>
         </StackPanel>
     </Grid>
