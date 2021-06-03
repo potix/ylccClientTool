@@ -5,8 +5,62 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ylccClientTool"
         mc:Ignorable="d"
-        Title="VoteWindow" Height="450" Width="800">
-    <Grid Name="MainGrid">
-        
+        Title="VoteWindow" Width="600" Height="500">
+    <Grid>
+        <StackPanel Orientation="Vertical">
+            <StackPanel Orientation="Vertical" HorizontalAlignment="Center">
+                <Grid x:Name="MainGrid"  Width="600" Height="400" >
+                </Grid>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                <Button Content="時間延長" Margin="10" Foreground="GhostWhite" Click="enkyo" Width="100">
+                    <Button.Template>
+                        <ControlTemplate TargetType="Button">
+                            <Border Name="ButtonBorder" BorderThickness="4" CornerRadius="10">
+                                <ContentPresenter VerticalAlignment="Center" HorizontalAlignment="Center" />
+                                <Border.Style>
+                                    <Style TargetType="{x:Type Border}">
+                                        <Setter Property="BorderBrush" Value="LightGray" />
+                                        <Setter Property="Background" Value="DimGray" />
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding IsPressed, RelativeSource={RelativeSource Mode=TemplatedParent}}" Value="True">
+                                                <Setter Property="BorderBrush" Value="WhiteSmoke"/>
+                                                <Setter Property="Background" Value="DarkGray"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Border.Style>
+                            </Border>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+                <Button Content="結果取得" Margin="10" Foreground="GhostWhite" Click="result" Width="100">
+                    <Button.Template>
+                        <ControlTemplate TargetType="Button">
+                            <Border Name="ButtonBorder" BorderThickness="4" CornerRadius="10">
+                                <ContentPresenter VerticalAlignment="Center" HorizontalAlignment="Center" />
+                                <Border.Style>
+                                    <Style TargetType="{x:Type Border}">
+                                        <Setter Property="BorderBrush" Value="LightGray" />
+                                        <Setter Property="Background" Value="DimGray" />
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding IsPressed, RelativeSource={RelativeSource Mode=TemplatedParent}}" Value="True">
+                                                <Setter Property="BorderBrush" Value="WhiteSmoke"/>
+                                                <Setter Property="Background" Value="DarkGray"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Border.Style>
+                            </Border>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                <Label Content="残り時間" Margin="5" />
+                <Label Content="{Binding CountDown}" Width="100" Margin="5"/>
+                <Label Content="秒" Margin="5" />
+            </StackPanel>
+        </StackPanel>
     </Grid>
 </Window>

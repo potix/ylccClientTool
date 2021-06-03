@@ -191,7 +191,7 @@ namespace ylccClientTool
         private void WindowClose()
         {
             _isCloseRequested = true;
-            this.Close();
+            Close();
         }
         private void WindowClosing(object sender, CancelEventArgs e)
         {

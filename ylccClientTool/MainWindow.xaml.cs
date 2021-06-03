@@ -219,7 +219,7 @@ namespace ylccClientTool
             {
                 return;
             }
-            _voteModel.VoteChoices.Add(new VoteChoice() { Text = VoteChoiceTextBox.Text });
+            _voteModel.VoteChoices.Add(new VoteChoice() { Text = VoteChoiceTextBox.Text, Count = 0, Rate = 0, RateStr = "" });
             VoteChoiceTextBox.Text = "";
         }
 

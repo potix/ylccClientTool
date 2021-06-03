@@ -7,23 +7,82 @@ using ylccProtocol;
 namespace ylccClientTool
 {
 
-    public class VoteChoice: BaseModel
+    public class VoteChoice : BaseModel
     {
-        public string Text { get; set; }
-    }
+        private string text;
+        public string Text
+        {
+            get
+            {
+                return this.text;
+            }
+            set
+            {
+                this.text = value;
+                OnPropertyChanged("Text");
+            }
+        }
 
-    public class VoteResult: BaseModel
-    {
-        public int Count { get; set; }
+        private int count;
+        public int Count
+        {
+            get
+            {
+                return this.count;
+            }
+            set
+            {
+                this.count = value;
+                OnPropertyChanged("Count");
+            }
+        }
 
-        public double Rate { get; set; }
+        private double rate;
+        public double Rate
+        {
+            get
+            {
+                return this.rate;
+            }
+            set
+            {
+                this.rate = value;
+                OnPropertyChanged("Rate");
+            }
+        }
+
+        private string rateStr;
+        public string RateStr
+        {
+            get
+            {
+                return this.rateStr;
+            }
+            set
+            {
+                this.rateStr = value;
+                OnPropertyChanged("RateStr");
+            }
+        }
     }
 
     public class VoteModel: BaseModel
     {
         public ObservableCollection<VoteChoice> VoteChoices { get; set; }
 
-        public int Duration { get; set; }
+        private int duration;
+        public int Duration
+        {
+            get
+            {
+                return this.duration;
+            }
+            set
+            {
+                this.duration = value;
+                OnPropertyChanged("Duration");
+            } 
+        }
 
         public string BoxForegroundColor { get; set; }
 
@@ -35,9 +94,19 @@ namespace ylccClientTool
 
         public int Padding { get; set; }
 
-        public int Total { get; set; }
-
-        public ObservableCollection<VoteResult> VoteResults { get; set; }
+        private int total;
+        public int Total
+        {
+            get
+            {
+                return this.total;
+            }
+            set
+            {
+                this.total = value;
+                OnPropertyChanged("Total");
+            }
+        }
 
         public VoteModel()
         {
@@ -47,24 +116,8 @@ namespace ylccClientTool
             BoxForegroundColor = "#FFFFFF";
             BoxBackgroundColor = "#4169E1";
             BoxBorderColor = "#000080";
-            VoteResults = null;
             FontSize = 20;
             Padding = 32;
-        }
-
-        public bool UpdateResults(int total, ICollection<VoteCount> counts)
-        {
-            if (total == 0)
-            {
-                return false;
-            }
-            Total = total;
-            VoteResults = new ObservableCollection<VoteResult>();
-            foreach (VoteCount count in counts)
-            {
-                VoteResults.Add(new VoteResult() { Count = count.Count, Rate = Math.Ceiling((double)count.Count * 100.0 / (double)total * 10) / 10 });
-            }
-            return true;
         }
     }
 }
