@@ -17,7 +17,7 @@
                 <Button Content="time extension" Margin="10" Foreground="GhostWhite" Click="UpdateDurationClick" Width="100">
                     <Button.Template>
                         <ControlTemplate TargetType="Button">
-                            <Border Name="ButtonBorder" BorderThickness="4" CornerRadius="10">
+                            <Border x:Name="ButtonBorder" BorderThickness="4" CornerRadius="10">
                                 <ContentPresenter VerticalAlignment="Center" HorizontalAlignment="Center" />
                                 <Border.Style>
                                     <Style TargetType="{x:Type Border}">
@@ -38,7 +38,7 @@
                 <Button Content="get result" Margin="10" Foreground="GhostWhite" Click="GetResultClick" Width="100">
                     <Button.Template>
                         <ControlTemplate TargetType="Button">
-                            <Border Name="ButtonBorder" BorderThickness="4" CornerRadius="10">
+                            <Border x:Name="ButtonBorder" BorderThickness="4" CornerRadius="10">
                                 <ContentPresenter VerticalAlignment="Center" HorizontalAlignment="Center" />
                                 <Border.Style>
                                     <Style TargetType="{x:Type Border}">

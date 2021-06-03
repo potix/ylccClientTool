@@ -9,7 +9,7 @@
         Title="WordCloudWindow" Height="540" Width="1040">
     <Grid>
         <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
-            <Image Name="WordCloudImage" />
+            <Image x:Name="WordCloudImage" />
         </StackPanel>
     </Grid>
 </Window>

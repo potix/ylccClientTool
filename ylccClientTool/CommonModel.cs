@@ -6,13 +6,13 @@ using ylccProtocol;
 
 namespace ylccClientTool
 {
-    public class TargetValue
+    public class TargetValue: BaseModel
     {
         public string Label { get; set; }
         public Target Target { get; set; }
     }
 
-    public class CommonModel
+    public class CommonModel: BaseModel
     {
         public string VideoId { get; set; }
 

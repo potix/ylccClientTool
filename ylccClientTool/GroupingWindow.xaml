@@ -7,7 +7,5 @@
         mc:Ignorable="d"
         Closing="WindowClosing"
         Title="GroupingWindow" Height="420" Width="420">
-    <Grid x:Name="ViewGrid">
-        
-    </Grid>
+    <Grid x:Name="ViewGrid" />
 </Window>
