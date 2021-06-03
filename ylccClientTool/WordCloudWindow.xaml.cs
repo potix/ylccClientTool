@@ -31,7 +31,6 @@ namespace ylccClientTool
         private bool _isClosed = false;
         private bool _isCloseRequested = false;
 
-
         public WordCloudWindow(CommonModel commonModel, WordCloudModel wordCloudModel)
         {
             InitializeComponent();
@@ -132,7 +131,6 @@ namespace ylccClientTool
             {
                 _cancelSource.Dispose();
             }
-
         }
 
         private void SetPngImage(byte[] pngImageData)

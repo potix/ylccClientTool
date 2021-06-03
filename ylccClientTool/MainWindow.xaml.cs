@@ -29,6 +29,7 @@ namespace ylccClientTool
         private RandomChoiceModel _randomChoiceModel = new RandomChoiceModel();
         private GroupingModel _groupingModel = new GroupingModel();
         private WordCloudModel _wordCloudModel = new WordCloudModel();
+        private VoteModel _voteModel = new VoteModel();
 
         public MainWindow()
         {
@@ -70,6 +71,18 @@ namespace ylccClientTool
             GroupingGroupingFontSizeTextBox.DataContext = _groupingModel;
             GroupingPaddingTextBox.DataContext = _groupingModel;
 
+            VoteChoicesDataGrid.DataContext = _voteModel;
+            VoteDurationSlider.DataContext = _voteModel;
+            VoteDurationLabel.DataContext = _voteModel;
+            VoteBoxForegroundColorTextBox.DataContext = _voteModel;
+            VoteBoxForegroundColorBorder.DataContext = _voteModel;
+            VoteBoxBackgroundColorTextBox.DataContext = _voteModel;
+            VoteBoxBackgroundColorBorder.DataContext = _voteModel;
+            VoteBoxBorderColorTextBox.DataContext = _voteModel;
+            VoteBoxBorderColorBorder.DataContext = _voteModel;
+            VoteFontSizeTextBox.DataContext = _voteModel;
+            VotePaddingTextBox.DataContext = _voteModel;
+
             WordCloudMessageLimitTextBox.DataContext = _wordCloudModel;
             WordCloudFontMaxSizeTextBox.DataContext = _wordCloudModel;
             WordCloudFontMinSizeTextBox.DataContext = _wordCloudModel;
@@ -78,7 +91,6 @@ namespace ylccClientTool
             WordCloudImageBackgroundColorTextBox.DataContext = _wordCloudModel;
             WordCloudImageBackgroundColorBorder.DataContext = _wordCloudModel;
             WordCloudFontColorsDataGrid.DataContext = _wordCloudModel;
-
 
         }
 
@@ -170,7 +182,6 @@ namespace ylccClientTool
             window.Start();
         }
 
-
         private void GroupingAddChoiceClick(object sender, EventArgs e)
         {
             if (GroupingChoiceTextBox.Text == null || GroupingChoiceTextBox.Text == "")
@@ -202,12 +213,30 @@ namespace ylccClientTool
             window.Start();
         }
 
+        private void VoteAddChoiceClick(object sender, EventArgs e)
+        {
+            if (VoteChoiceTextBox.Text == null || VoteChoiceTextBox.Text == "")
+            {
+                return;
+            }
+            _voteModel.VoteChoices.Add(new VoteChoice() { Text = VoteChoiceTextBox.Text });
+            VoteChoiceTextBox.Text = "";
+        }
 
+        private void VoteRemoveChoiceClick(object sender, EventArgs e)
+        {
+            if (VoteChoicesDataGrid.SelectedIndex == -1)
+            {
+                return;
+            }
+            _voteModel.VoteChoices.Remove(_voteModel.VoteChoices[VoteChoicesDataGrid.SelectedIndex]);
+            VoteChoicesDataGrid.SelectedIndex = -1;
+        }
 
+        private void VoteStart(object sender, EventArgs e)
+        {
 
-
-
-
+        }
 
 
 

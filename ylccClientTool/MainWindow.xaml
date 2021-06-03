@@ -145,7 +145,7 @@
                                 <Button Content="add" VerticalAlignment="Top" Click="GroupingAddChoiceClick" Height="40" Margin="5"  />
                             </StackPanel>
                             <StackPanel Orientation="Vertical">
-                                <DataGrid x:Name="GroupingChoicesDataGrid" AutoGenerateColumns="False" HorizontalAlignment="Left"  Width="600" Height="200"  VerticalAlignment="Top" CanUserAddRows="False"  CanUserSortColumns="False" ItemsSource="{Binding GroupingChoices}" >
+                                <DataGrid x:Name="GroupingChoicesDataGrid" AutoGenerateColumns="False"  Width="600" Height="200"  CanUserAddRows="False"  CanUserSortColumns="False" ItemsSource="{Binding GroupingChoices}" >
                                     <DataGrid.Columns>
                                         <DataGridTextColumn  Width="500"  Header="choice" Binding="{Binding Text, Mode=TwoWay}" />
                                         <DataGridTemplateColumn Width="*" Header="operation">
@@ -195,20 +195,73 @@
                         </StackPanel>
                     </TabItem>
                     <TabItem  Header="Vote">
+                        <StackPanel Orientation="Vertical">
+                            <StackPanel Orientation="Horizontal">
+                                <Label Content="Choice" Height="40" Margin="5" />
+                                <TextBox x:Name="VoteChoiceTextBox" AcceptsReturn="True" TextWrapping="Wrap" Width="200" Height="40" Margin="5"  />
+                                <Button Content="add" VerticalAlignment="Top" Click="VoteAddChoiceClick" Height="40" Margin="5"  />
+                            </StackPanel>
+                            <StackPanel Orientation="Vertical" HorizontalAlignment="Left">
+                                <DataGrid x:Name="VoteChoicesDataGrid" AutoGenerateColumns="False" Height="200" Width="600" CanUserAddRows="False"  CanUserSortColumns="False" ItemsSource="{Binding VoteChoices}" >
+                                    <DataGrid.Columns>
+                                        <DataGridTextColumn  Width="500"  Header="Choice" Binding="{Binding Text, Mode=TwoWay}" />
+                                        <DataGridTemplateColumn Width="*" Header="operation">
+                                            <DataGridTemplateColumn.CellTemplate>
+                                                <DataTemplate>
+                                                    <Button Content="remove" Click="VoteRemoveChoiceClick" />
+                                                </DataTemplate>
+                                            </DataGridTemplateColumn.CellTemplate>
+                                        </DataGridTemplateColumn>
+                                    </DataGrid.Columns>
+                                </DataGrid>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <Label Content="Duration" Width="100" Margin="5" />
+                                <Slider  x:Name="VoteDurationSlider" Value="{Binding Duration}" Width="200" Minimum="0" Maximum="120" SmallChange="1" LargeChange="5" TickPlacement="TopLeft" IsSnapToTickEnabled="True" TickFrequency="1" Margin="5"/>
+                                <Label  x:Name="VoteDurationLabel" Content="{Binding Duration}"  Width="60" Margin="5"/>
+                                <Label  Content="min"  Margin="5" />
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <Label Content="BoxForeground" Width="100" Margin="5"/>
+                                <TextBox x:Name="VoteBoxForegroundColorTextBox" Text="{Binding BoxForegroundColor}" Margin="5" Width="100" PreviewTextInput="ColorPreviewTextInput" CommandManager.PreviewExecuted="ColorPreviewExecuted"/>
+                                <Border x:Name="VoteBoxForegroundColorBorder" Background="{Binding BoxForegroundColor}" BorderBrush="#000000"  BorderThickness="1" Margin="5" Width="30"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <Label Content="BoxBackground"  Width="100" Margin="5"/>
+                                <TextBox x:Name="VoteBoxBackgroundColorTextBox"  Text="{Binding BoxBackgroundColor}"  Width="100" Margin="5" PreviewTextInput="ColorPreviewTextInput" CommandManager.PreviewExecuted="ColorPreviewExecuted"/>
+                                <Border x:Name="VoteBoxBackgroundColorBorder" Background="{Binding BoxBackgroundColor}" BorderBrush="#000000"  BorderThickness="1"  Width="30" Margin="5" />
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <Label Content="BoxBorderColor"  Width="100" Margin="5"/>
+                                <TextBox x:Name="VoteBoxBorderColorTextBox" Text="{Binding BoxBorderColor}" Width="100" Margin="5" PreviewTextInput="ColorPreviewTextInput" CommandManager.PreviewExecuted="ColorPreviewExecuted"/>
+                                <Border x:Name="VoteBoxBorderColorBorder" Background="{Binding BoxBorderColor}" BorderBrush="#000000"  BorderThickness="1"  Width="30" Margin="5" />
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <Label Content="FontSize" Width="100" Margin="5"/>
+                                <TextBox x:Name="VoteFontSizeTextBox" Text="{Binding FontSize}"  Width="100" Margin="5"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <Label Content="Padding" Width="100" Margin="5" />
+                                <TextBox x:Name="VotePaddingTextBox" Text="{Binding Padding}" Width="100" Margin="5" />
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <Button Content="Start" Width="100" Margin="5" Click="VoteStart" />
+                            </StackPanel>
+                        </StackPanel>
                     </TabItem>
                     <TabItem  Header="WordCloud">
                         <StackPanel  Orientation="Vertical" HorizontalAlignment="Left">
                             <StackPanel Orientation="Horizontal">
                                 <Label Content="MessageLimit" Width="100" Margin="5"/>
-                                <TextBox Name="WordCloudMessageLimitTextBox" Text="{Binding MessageLimit}"  Width="100" Margin="5" PreviewTextInput="IntPreviewTextInput" CommandManager.PreviewExecuted="IntPreviewExecuted"/>
+                                <TextBox x:Name="WordCloudMessageLimitTextBox" Text="{Binding MessageLimit}"  Width="100" Margin="5" PreviewTextInput="IntPreviewTextInput" CommandManager.PreviewExecuted="IntPreviewExecuted"/>
                             </StackPanel>
                             <StackPanel Orientation="Horizontal">
                                 <Label Content="FontMaxSize"  Width="100" Margin="5" />
-                                <TextBox Name="WordCloudFontMaxSizeTextBox" Text="{Binding FontMaxSize}"  Width="100" Margin="5" PreviewTextInput="IntPreviewTextInput" CommandManager.PreviewExecuted="IntPreviewExecuted"/>
+                                <TextBox x:Name="WordCloudFontMaxSizeTextBox" Text="{Binding FontMaxSize}"  Width="100" Margin="5" PreviewTextInput="IntPreviewTextInput" CommandManager.PreviewExecuted="IntPreviewExecuted"/>
                             </StackPanel>
                             <StackPanel Orientation="Horizontal">
                                 <Label Content="FontMinSize"  Width="100" Margin="5" />
-                                <TextBox Name="WordCloudFontMinSizeTextBox" Text="{Binding FontMaxSize}"  Width="100" Margin="5" PreviewTextInput="IntPreviewTextInput" CommandManager.PreviewExecuted="IntPreviewExecuted"/>
+                                <TextBox x:Name="WordCloudFontMinSizeTextBox" Text="{Binding FontMaxSize}"  Width="100" Margin="5" PreviewTextInput="IntPreviewTextInput" CommandManager.PreviewExecuted="IntPreviewExecuted"/>
                             </StackPanel>
                             <StackPanel Orientation="Horizontal">
                                 <Label Content="Width" Width="100" Margin="5" />
@@ -220,8 +273,8 @@
                             </StackPanel>
                             <StackPanel Orientation="Horizontal">
                                 <Label Content="ImageBackgroundColor"  Width="100" Margin="5" />
-                                <TextBox Name="WordCloudImageBackgroundColorTextBox" Text="{Binding ImageBackgroundColor}"  Width="100"  Margin="5"  PreviewTextInput="ColorPreviewTextInput" CommandManager.PreviewExecuted="ColorPreviewExecuted"  />
-                                <Border Name="WordCloudImageBackgroundColorBorder"  Background="{Binding ImageBackgroundColor}" BorderThickness="1" BorderBrush="Black" Width="30" Margin="5"/>
+                                <TextBox x:Name="WordCloudImageBackgroundColorTextBox" Text="{Binding ImageBackgroundColor}"  Width="100"  Margin="5"  PreviewTextInput="ColorPreviewTextInput" CommandManager.PreviewExecuted="ColorPreviewExecuted"  />
+                                <Border x:Name="WordCloudImageBackgroundColorBorder"  Background="{Binding ImageBackgroundColor}" BorderThickness="1" BorderBrush="Black" Width="30" Margin="5"/>
                             </StackPanel>
                             <StackPanel Orientation="Horizontal">
                                 <Label Content="FontColor" Width="100" Margin="5"/>
@@ -229,7 +282,7 @@
                                 <Button Content="add" Click="WordCloudAddFontColorClick" Margin="5"/>
                             </StackPanel>
                             <StackPanel Orientation="Horizontal">
-                                <DataGrid Name="WordCloudFontColorsDataGrid" ItemsSource="{Binding FontColors}" AutoGenerateColumns="False" HorizontalAlignment="Left"  Width="260" Height="200"  VerticalAlignment="Top" CanUserAddRows="False"  CanUserSortColumns="False" >
+                                <DataGrid x:Name="WordCloudFontColorsDataGrid" ItemsSource="{Binding FontColors}" AutoGenerateColumns="False" HorizontalAlignment="Left"  Width="260" Height="200"  VerticalAlignment="Top" CanUserAddRows="False"  CanUserSortColumns="False" >
                                     <DataGrid.Columns>
                                         <DataGridTextColumn Header="color" Width="120" Binding="{Binding Color}" />
                                         <DataGridTemplateColumn Width="60" Header="sample">

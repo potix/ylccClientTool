@@ -16,6 +16,9 @@
     <Compile Update="RandomChoiceWindow.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="VoteWindow.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="WatchMessagesWindow.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -34,6 +37,9 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Update="RandomChoiceWindow.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="VoteWindow.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="WatchMessagesWindow.xaml">
