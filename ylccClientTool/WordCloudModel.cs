@@ -73,7 +73,5 @@ namespace ylccClientTool
         {
             return protocol.BuildColor(ImageBackgroundColor);
         }
-
-
     }
 }

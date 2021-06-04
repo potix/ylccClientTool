@@ -53,8 +53,19 @@ namespace ylccClientTool
 
     public class WatchMessagesModel : RandomChoiceModel
     {
-
-        public ObservableCollection<WatchMessage> WatchMessages { get; set; }
+        private ObservableCollection<WatchMessage> watchMessages;
+        public ObservableCollection<WatchMessage> WatchMessages
+        {
+            get
+            {
+                return this.watchMessages;
+            }
+            set
+            {
+                this.watchMessages = value;
+                OnPropertyChanged("WatchMessages");
+            }
+        }
 
         public WatchMessagesModel()
         {

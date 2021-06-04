@@ -36,13 +36,62 @@ namespace ylccClientTool
             }
         }
 
-        public int MediaWidth { get; set; }
+        private int mediaWidth;
+        public int MediaWidth
+        {
+            get
+            {
+                return this.mediaWidth;
+            }
+            set
+            {
+                this.mediaWidth = value;
+                OnPropertyChanged("MediaWidth");
+            }
+        }
 
-        public int MediaHeight { get; set; }
+        private int hediaHeight;
+        public int MediaHeight
+        {
+            get
+            {
+                return this.hediaHeight;
+            }
+            set
+            {
+                this.hediaHeight = value;
+                OnPropertyChanged("MediaHeight");
+            }
+        }
 
-        public string LabelForeground { get; set; }
+        private string labelForeground;
+        public string LabelForeground
+        {
+            get
+            {
+                return this.labelForeground;
+            }
+            set
+            {
+                this.labelForeground = value;
+                OnPropertyChanged("LabelForeground");
+            }
+        }
 
-        public Double LabelFontSize { get; set; }
+        private int labelFontSize;
+        public int LabelFontSize
+        {
+            get
+            {
+                return this.labelFontSize;
+            }
+            set
+            {
+                this.labelFontSize = value;
+                OnPropertyChanged("LabelFontSize");
+            }
+        }
+
 
         public RandomChoiceModel()
         {

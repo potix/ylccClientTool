@@ -30,6 +30,9 @@ namespace ylccClientTool
         public MainWindow()
         {
             InitializeComponent();
+
+
+
             VideoIdTextBox.DataContext = _models.CommonModel;
             URITextBox.DataContext = _models.CommonModel;
             TargetComboBox.DataContext = _models.CommonModel;

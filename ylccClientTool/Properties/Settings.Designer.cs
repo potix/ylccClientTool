@@ -22,5 +22,17 @@ namespace ylccClientTool.Properties {
                 return defaultInstance;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string lastConfig {
+            get {
+                return ((string)(this["lastConfig"]));
+            }
+            set {
+                this["lastConfig"] = value;
+            }
+        }
     }
 }
