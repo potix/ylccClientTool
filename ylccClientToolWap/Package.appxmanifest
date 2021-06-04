@@ -9,7 +9,7 @@
   <Identity
     Name="c5349057-62bc-4145-8021-51a9062041e7"
     Publisher="CN=Hiroyuki"
-    Version="1.0.1.0" />
+    Version="1.0.3.0" />
 
   <Properties>
     <DisplayName>ylccClientToolWap</DisplayName>
