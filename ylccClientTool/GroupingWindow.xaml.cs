@@ -44,7 +44,7 @@ namespace ylccClientTool
             Background = new SolidColorBrush(mColor);
 
             Width = groupingModel.Width + 20;
-            Height = groupingModel.Height + 20;
+            Height = groupingModel.Height + 40;
         }
 
         public async void Start()
