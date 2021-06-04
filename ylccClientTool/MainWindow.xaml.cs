@@ -33,7 +33,6 @@ namespace ylccClientTool
             InitializeComponent();
 
             string json = Properties.Settings.Default.lastConfig;
-            Debug.Print(json);
             MemoryStream ms = new MemoryStream(Encoding.UTF8.GetBytes(json));
             try
             {
@@ -174,7 +173,6 @@ namespace ylccClientTool
                     serializer.WriteObject(ms, _models);
                     ms.Position = 0;
                     string json = sr.ReadToEnd();
-                    Debug.Print(json);
                     Properties.Settings.Default.lastConfig = json;
                     Properties.Settings.Default.Save();
                 }
