@@ -218,7 +218,7 @@
                             </StackPanel>
                             <StackPanel Orientation="Horizontal">
                                 <Label Content="Duration" Width="100" Margin="5" />
-                                <Slider  x:Name="VoteDurationSlider" Value="{Binding Duration}" Width="200" Minimum="0" Maximum="120" SmallChange="1" LargeChange="5" TickPlacement="TopLeft" IsSnapToTickEnabled="True" TickFrequency="1" Margin="5"/>
+                                <Slider  x:Name="VoteDurationSlider" Value="{Binding Duration}" Width="200" Minimum="1" Maximum="120" SmallChange="1" LargeChange="5" TickPlacement="TopLeft" IsSnapToTickEnabled="True" TickFrequency="1" Margin="5"/>
                                 <Label  x:Name="VoteDurationLabel" Content="{Binding Duration}"  Width="60" Margin="5"/>
                                 <Label  Content="min"  Margin="5" />
                             </StackPanel>
