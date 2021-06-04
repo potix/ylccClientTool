@@ -6,7 +6,7 @@
              StartupUri="MainWindow.xaml">
     <Application.Resources>
         <Style x:Key="window_common" TargetType="Window">
-            <Setter Property="Icon" Value="YCT.png"/>
+            <Setter Property="Icon" Value="C:\Users\Hiroyuki\source\repos\ylccClientTool\ylccClientTool\YCT.png"/>
         </Style>
     </Application.Resources>
 </Application>
