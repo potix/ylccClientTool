@@ -1,6 +1,7 @@
 ﻿using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -31,7 +32,24 @@ namespace ylccClientTool
         {
             InitializeComponent();
 
-
+            string json = Properties.Settings.Default.lastConfig;
+            var _models = new Models();
+            var ms = new MemoryStream(Encoding.UTF8.GetBytes(json));
+            try
+            {
+                var ser = new DataContractJsonSerializer(_models.GetType());
+                Models newModels = ser.ReadObject(ms) as Models;
+                ms.Close();
+                _models.Update(newModels);
+            } 
+            catch (System.Runtime.Serialization.SerializationException ex)
+            {
+                Debug.Print("Deserialization error: " + ex.ToString());
+            }
+            finally
+            {
+                ms.Close();
+            }
 
             VideoIdTextBox.DataContext = _models.CommonModel;
             URITextBox.DataContext = _models.CommonModel;
@@ -95,15 +113,61 @@ namespace ylccClientTool
 
         private void LoadConfigFile(object sender, EventArgs e)
         {
-
+            OpenFileDialog dialog = new OpenFileDialog();
+            dialog.Filter = "config file (*.conf)|*.conf";
+            if (dialog.ShowDialog() == true)
+            {
+                ConfigFile.Text = dialog.FileName;
+                string json = System.IO.File.ReadAllText(ConfigFile.Text);
+                var _models = new Models();
+                var ms = new MemoryStream(Encoding.UTF8.GetBytes(json));
+                try
+                {
+                    var ser = new DataContractJsonSerializer(_models.GetType());
+                    Models newModels = ser.ReadObject(ms) as Models;                    
+                    _models.Update(newModels);
+                }
+                catch (System.Runtime.Serialization.SerializationException ex)
+                {
+                    Debug.Print("Deserialization error: " + ex.ToString());
+                }
+                finally
+                {
+                    ms.Close();
+                }
+            }
         }
+
         private void SaveConfigFile(object sender, EventArgs e)
         {
             SaveFileDialog dialog = new SaveFileDialog();
             dialog.Filter = "config file (*.conf)|*.conf";
             if (dialog.ShowDialog() == true)
             {
-                ConfigFile.Text = dialog.FileName;
+                try
+                {
+                    ConfigFile.Text = dialog.FileName;
+                    using (var ms = new MemoryStream())
+                    using (var sr = new StreamReader(ms))
+                    {
+                        var serializer = new DataContractJsonSerializer(typeof(Models));
+                        serializer.WriteObject(ms, _models);
+                        ms.Position = 0;
+                        var json = sr.ReadToEnd();
+                        File.WriteAllText(ConfigFile.Text, json);
+                    }
+                }
+                catch (System.Runtime.Serialization.SerializationException ex)
+                {
+                    Debug.Print("Serialization error: " + ex.ToString());
+                }
+            }
+        }
+
+        private void WindowClosing(object sender, CancelEventArgs e)
+        {
+            try
+            {
                 using (var ms = new MemoryStream())
                 using (var sr = new StreamReader(ms))
                 {
@@ -111,8 +175,12 @@ namespace ylccClientTool
                     serializer.WriteObject(ms, _models);
                     ms.Position = 0;
                     var json = sr.ReadToEnd();
-                    Debug.Print(json);
+                    Properties.Settings.Default.lastConfig = json;
                 }
+            }
+            catch (System.Runtime.Serialization.SerializationException ex)
+            {
+                Debug.Print("Serialization error: " + ex.ToString());
             }
         }
 

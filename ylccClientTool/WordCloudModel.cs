@@ -157,5 +157,20 @@ namespace ylccClientTool
         {
             return protocol.BuildColor(ImageBackgroundColor);
         }
+
+        public void Update(WordCloudModel newModel)
+        {
+            MessageLimit = newModel.MessageLimit;
+            FontMaxSize = newModel.FontMaxSize;
+            FontMinSize = newModel.FontMinSize;
+            Width = newModel.Width;
+            Height = newModel.Height;
+            ImageBackgroundColor = newModel.ImageBackgroundColor;
+            FontColors.Clear();
+            foreach (FontColor fc in newModel.FontColors)
+            {
+                FontColors.Add(fc);
+            }
+        }
     }
 }

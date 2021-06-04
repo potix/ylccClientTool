@@ -125,16 +125,23 @@ namespace ylccClientTool
 
         public CommonModel()
         {
+            TargetValue = new TargetValue { Label = "all user", Target = Target.AllUser };
+            CandidateTargetValues = new ObservableCollection<TargetValue>();
+            CandidateTargetValues.Add(TargetValue);
+            CandidateTargetValues.Add(new TargetValue { Label = "owner and moderator and sponsor", Target = Target.OwnerModeratorSponsor });
+            CandidateTargetValues.Add(new TargetValue { Label = "owner and moderator", Target = Target.OwnerModerator });
             VideoId = "";
             Uri = "http://127.0.0.1:12345";
             IsInsecure = true;
-            CandidateTargetValues = new ObservableCollection<TargetValue>();
-            TargetValue defaultTargetValue = new TargetValue { Label = "all user", Target = Target.AllUser };
-            CandidateTargetValues.Add(defaultTargetValue);
-            CandidateTargetValues.Add(new TargetValue { Label = "owner and moderator and sponsor", Target = Target.OwnerModeratorSponsor });
-            CandidateTargetValues.Add(new TargetValue { Label = "owner and moderator", Target = Target.OwnerModerator });
-            TargetValue = defaultTargetValue;
             WindowBackgroundColor = "#FF000000";
+        }
+
+        public void Update(CommonModel newModel)
+        {
+            VideoId = newModel.VideoId;
+            Uri = newModel.Uri;
+            IsInsecure = newModel.IsInsecure;
+            WindowBackgroundColor = newModel.WindowBackgroundColor;
         }
     }
 }

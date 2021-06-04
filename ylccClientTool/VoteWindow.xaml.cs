@@ -80,7 +80,6 @@ namespace ylccClientTool
 
         private readonly YlccProtocol _protocol = new YlccProtocol();
         private readonly int _minutes = 60;
-        private ObservableCollection<VoteResult> _voteResults = new ObservableCollection<VoteResult>();
         private CommonModel _commonModel;
         private VoteModel _voteModel;
         private int _maxCols;
@@ -88,6 +87,22 @@ namespace ylccClientTool
         private int _boxHeight;
         private string _voteId;
         private System.Timers.Timer _timer;
+
+        private ObservableCollection<VoteResult> _voteResults = new ObservableCollection<VoteResult>();
+
+        private int total;
+        public int Total
+        {
+            get
+            {
+                return this.total;
+            }
+            set
+            {
+                this.total = value;
+                OnPropertyChanged("Total");
+            }
+        }
 
         private int countDown;
         public int CountDown
@@ -189,6 +204,7 @@ namespace ylccClientTool
                 }
                 _voteId = openVoteResponse.VoteId;
                 CountDown = _voteModel.Duration * 60;
+                Total = 0;
                 for (int i = 0; i < _voteModel.VoteChoices.Count; i += 1)
                 {
                     _voteResults.Add(new VoteResult() { Count = 0, Rate = 0, RateStr = "" });
@@ -281,8 +297,8 @@ namespace ylccClientTool
                     Close();
                     return;
                 }
-                _voteModel.Total = getVoteResultResponse.Total;
-                if (_voteModel.Total == 0)
+                Total = getVoteResultResponse.Total;
+                if (Total == 0)
                 {
                     return;
                 }
@@ -291,7 +307,7 @@ namespace ylccClientTool
                 {
                     VoteResult result = _voteResults[idx];
                     result.Count = count.Count;
-                    result.Rate = Math.Ceiling((double)count.Count * 100.0 / (double)_voteModel.Total * 10) / 10;
+                    result.Rate = Math.Ceiling((double)count.Count * 100.0 / (double)Total * 10) / 10;
                     result.RateStr = result.Rate.ToString() + "%";
                     idx += 1;
                 }

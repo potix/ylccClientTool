@@ -123,30 +123,25 @@ namespace ylccClientTool
             }
         }
 
-        private int total;
-        public int Total
-        {
-            get
-            {
-                return this.total;
-            }
-            set
-            {
-                this.total = value;
-                OnPropertyChanged("Total");
-            }
-        }
-
         public VoteModel()
         {
             VoteChoices = new ObservableCollection<VoteChoice>();
             Duration = 5;
-            Total = 0;
             BoxForegroundColor = "#FFFFFF";
             BoxBackgroundColor = "#4169E1";
             BoxBorderColor = "#000080";
             FontSize = 20;
             Padding = 32;
+        }
+
+        public void Update(VoteModel newModel)
+        {
+            Duration = newModel.Duration;
+            BoxForegroundColor = newModel.BoxForegroundColor;
+            BoxBackgroundColor = newModel.BoxBackgroundColor;
+            BoxBorderColor = newModel.BoxBorderColor;
+            FontSize = newModel.FontSize;
+            Padding = newModel.Padding;
         }
     }
 }

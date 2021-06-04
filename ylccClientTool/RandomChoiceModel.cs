@@ -101,5 +101,14 @@ namespace ylccClientTool
             LabelForeground = "#FFFFFFFF";
             LabelFontSize = 20;
         }
+
+        public void Update(RandomChoiceModel newModel)
+        {
+            Volume = newModel.Volume;
+            MediaWidth = newModel.MediaWidth;
+            MediaHeight = newModel.MediaHeight;
+            LabelForeground = newModel.LabelForeground;
+            LabelFontSize = newModel.LabelFontSize;
+        }
     }
 }

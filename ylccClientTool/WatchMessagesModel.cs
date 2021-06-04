@@ -71,5 +71,11 @@ namespace ylccClientTool
         {
             WatchMessages = new ObservableCollection<WatchMessage>();
         }
+
+        public void Update(WatchMessagesModel newModel)
+        {
+
+        }
+
     }
 }

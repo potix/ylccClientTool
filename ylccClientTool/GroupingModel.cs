@@ -136,31 +136,26 @@ namespace ylccClientTool
             }
         }
 
-        private int total;
-        public int Total
-        {
-            get
-            {
-                return this.total;
-            }
-            set
-            {
-                this.total = value;
-                OnPropertyChanged("Total");
-            }
-        }
-
         public GroupingModel() {
             GroupingChoices = new ObservableCollection<GroupingChoice>();
-            Total = 0;
             BoxForegroundColor = "#FFFFFFFF";
             BoxBackgroundColor = "#FF4169E1";
             BoxBorderColor = "#FF000080";
-            Height = 900;
             Width = 1440;
+            Height = 900;
             FontSize = 20;
             Padding = 32;
         }
 
+        public void Update(GroupingModel newModel)
+        {
+            BoxForegroundColor = newModel.BoxForegroundColor;
+            BoxBackgroundColor = newModel.BoxBackgroundColor;
+            BoxBorderColor = newModel.BoxBorderColor;
+            Width = newModel.Width;
+            Height = newModel.Height;
+            FontSize = newModel.FontSize;
+            Padding = newModel.Padding;
+        }
     }
 }
