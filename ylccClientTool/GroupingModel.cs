@@ -22,25 +22,133 @@ namespace ylccClientTool
         }
     }
 
-    public class GroupingModel
+    public class GroupingModel :BaseModel
     {
-        public ObservableCollection<GroupingChoice> GroupingChoices { get; set; }
+        private ObservableCollection<GroupingChoice> groupingChoices;
+        public ObservableCollection<GroupingChoice> GroupingChoices
+        {
+            get
+            {
+                return this.groupingChoices;
+            }
+            set
+            {
+                this.groupingChoices = value;
+                OnPropertyChanged("GroupingChoices");
+            }
+        }
 
-        public int Width { get; set; }
+        private int width;
+        public int Width
+        {
+            get
+            {
+                return this.width;
+            }
+            set
+            {
+                this.width = value;
+                OnPropertyChanged("Width");
+            }
+        }
 
-        public int Height { get; set; }
+        private int height;
+        public int Height
+        {
+            get
+            {
+                return this.height;
+            }
+            set
+            {
+                this.height = value;
+                OnPropertyChanged("Height");
+            }
+        }
 
-        public string BoxForegroundColor { get; set; }
+        private string boxForegroundColor;
+        public string BoxForegroundColor
+        {
+            get
+            {
+                return this.boxForegroundColor;
+            }
+            set
+            {
+                this.boxForegroundColor = value;
+                OnPropertyChanged("BoxForegroundColor");
+            }
+        }
 
-        public string BoxBackgroundColor { get; set; }
+        private string boxBackgroundColor;
+        public string BoxBackgroundColor
+        {
+            get
+            {
+                return this.boxBackgroundColor;
+            }
+            set
+            {
+                this.boxBackgroundColor = value;
+                OnPropertyChanged("BoxBackgroundColor");
+            }
+        }
 
-        public string BoxBorderColor { get; set; }
+        private string boxBorderColor;
+        public string BoxBorderColor
+        {
+            get
+            {
+                return this.boxBorderColor;
+            }
+            set
+            {
+                this.boxBorderColor = value;
+                OnPropertyChanged("BoxBorderColor");
+            }
+        }
 
-        public int FontSize { get; set; }
+        private int fontSize;
+        public int FontSize
+        {
+            get
+            {
+                return this.fontSize;
+            }
+            set
+            {
+                this.fontSize = value;
+                OnPropertyChanged("FontSize");
+            }
+        }
 
-        public int Padding { get; set; }
+        private int padding;
+        public int Padding
+        {
+            get
+            {
+                return this.padding;
+            }
+            set
+            {
+                this.padding = value;
+                OnPropertyChanged("Padding");
+            }
+        }
 
-        public int Total { get; set; }
+        private int total;
+        public int Total
+        {
+            get
+            {
+                return this.total;
+            }
+            set
+            {
+                this.total = value;
+                OnPropertyChanged("Total");
+            }
+        }
 
         public GroupingModel() {
             GroupingChoices = new ObservableCollection<GroupingChoice>();

@@ -25,7 +25,19 @@ namespace ylccClientTool
 
     public class VoteModel: BaseModel
     {
-        public ObservableCollection<VoteChoice> VoteChoices { get; set; }
+        private ObservableCollection<VoteChoice> voteChoices;
+        public ObservableCollection<VoteChoice> VoteChoices
+        {
+            get
+            {
+                return this.voteChoices;
+            }
+            set
+            {
+                this.voteChoices = value;
+                OnPropertyChanged("VoteChoices");
+            }
+        }
 
         private int duration;
         public int Duration
