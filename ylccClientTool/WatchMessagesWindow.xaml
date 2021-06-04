@@ -6,6 +6,7 @@
         xmlns:local="clr-namespace:ylccClientTool"
         mc:Ignorable="d"
         Closing="WindowClosing"
+        Icon="YCT.png"
         Title="WatchMessagesWindow" Height="440" Width="440">
     <Grid>
         <MediaElement x:Name="WatchMessagesMediaElement" Volume="1" Width="400" Height="400"></MediaElement>

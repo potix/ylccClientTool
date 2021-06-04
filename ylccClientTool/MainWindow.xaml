@@ -6,6 +6,7 @@
         xmlns:local="clr-namespace:ylccClientTool"
         mc:Ignorable="d"
         Closing="WindowClosing"
+        Icon="YCT.png"
         Title="ylccClientTool" Height="800" Width="800">
     <Grid>
         <StackPanel Orientation="Vertical" HorizontalAlignment="Center">

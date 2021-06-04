@@ -6,6 +6,7 @@
         xmlns:local="clr-namespace:ylccClientTool"
         mc:Ignorable="d"
         Closing="WindowClosing"
+        Icon="YCT.png"
         Title="WordCloudWindow" Height="540" Width="1040">
     <Grid>
         <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">

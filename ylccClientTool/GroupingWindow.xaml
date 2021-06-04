@@ -6,6 +6,7 @@
         xmlns:local="clr-namespace:ylccClientTool"
         mc:Ignorable="d"
         Closing="WindowClosing"
+        Icon="YCT.png"
         Title="GroupingWindow" Height="420" Width="420">
     <Grid x:Name="ViewGrid" />
 </Window>
