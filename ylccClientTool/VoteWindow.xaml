@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:ylccClientTool"
         mc:Ignorable="d"
         Closing="WindowClosing"
-        Icon="YCT.png"
+        Style="{StaticResource window_common}"
         Title="VoteWindow" Width="600" Height="500">
     <Grid>
         <StackPanel Orientation="Vertical">

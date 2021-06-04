@@ -5,6 +5,8 @@
              xmlns:prop="clr-namespace:ylccClientTool.Properties"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-         
+        <Style x:Key="window_common" TargetType="Window">
+            <Setter Property="Icon" Value="YCT.png"/>
+        </Style>
     </Application.Resources>
 </Application>
