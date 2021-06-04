@@ -27,19 +27,103 @@ namespace ylccClientTool
     {
         private readonly YlccProtocol protocol = new YlccProtocol();
 
-        public int MessageLimit { get; set; }
+        private int messageLimit;
+        public int MessageLimit
+        {
+            get
+            {
+                return this.messageLimit;
+            }
+            set
+            {
+                this.messageLimit = value;
+                OnPropertyChanged("MessageLimit");
+            }
+        }
 
-        public int FontMaxSize { get; set; }
+        private int fontMaxSize;
+        public int FontMaxSize
+        {
+            get
+            {
+                return this.fontMaxSize;
+            }
+            set
+            {
+                this.fontMaxSize = value;
+                OnPropertyChanged("FontMaxSize");
+            }
+        }
 
-        public int FontMinSize { get; set; }
+        private int fontMinSize;
+        public int FontMinSize
+        {
+            get
+            {
+                return this.fontMinSize;
+            }
+            set
+            {
+                this.fontMinSize = value;
+                OnPropertyChanged("FontMinSize");
+            }
+        }
 
-        public int Width { get; set; }
+        private int width;
+        public int Width
+        {
+            get
+            {
+                return this.width;
+            }
+            set
+            {
+                this.width = value;
+                OnPropertyChanged("Width");
+            }
+        }
 
-        public int Height { get; set; }
+        private int height;
+        public int Height
+        {
+            get
+            {
+                return this.height;
+            }
+            set
+            {
+                this.height = value;
+                OnPropertyChanged("Height");
+            }
+        }
 
-        public string ImageBackgroundColor { get; set; }
+        private string imageBackgroundColor;
+        public string ImageBackgroundColor
+        {
+            get
+            {
+                return this.imageBackgroundColor;
+            }
+            set
+            {
+                this.imageBackgroundColor = value;
+                OnPropertyChanged("ImageBackgroundColor");
+            }
+        }
 
-        public ObservableCollection<FontColor> FontColors { get; set; }
+        private  ObservableCollection<FontColor> fontColors;
+        public ObservableCollection<FontColor> FontColors
+        {
+            get
+            {
+                return this.fontColors;
+            }
+            set
+            {
+                this.fontColors = value;
+                OnPropertyChanged("FontColors");
+            }
+        }
 
         public WordCloudModel()
         {
