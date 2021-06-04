@@ -2,7 +2,9 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
+using System.Runtime.Serialization.Json;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -23,75 +25,69 @@ namespace ylccClientTool
     /// </summary>
     public partial class MainWindow : Window
     {
-
-        private CommonModel _commonModel = new CommonModel();
-        private WatchMessagesModel _watchMessagesModel = new WatchMessagesModel();
-        private RandomChoiceModel _randomChoiceModel = new RandomChoiceModel();
-        private GroupingModel _groupingModel = new GroupingModel();
-        private WordCloudModel _wordCloudModel = new WordCloudModel();
-        private VoteModel _voteModel = new VoteModel();
+        Models _models = new Models();
 
         public MainWindow()
         {
             InitializeComponent();
-            VideoIdTextBox.DataContext = _commonModel;
-            URITextBox.DataContext = _commonModel;
-            TargetComboBox.DataContext = _commonModel;
-            InsecureCheckBox.DataContext = _commonModel;
-            WindowBackgroundColorTextBox.DataContext = _commonModel;
-            WindowBackgroundColorBorder.DataContext = _commonModel;
-            WatchMessagesDataGrid.DataContext = _watchMessagesModel;
-            WatchMessagesVolumeSlider.DataContext = _watchMessagesModel;
-            WatchMessagesVolumeLabel.DataContext = _watchMessagesModel;
-            WatchMessagesMediaTextBox.DataContext = _watchMessagesModel;
-            WatchMessagesMediaWidthTextBox.DataContext = _watchMessagesModel;
-            WatchMessagesMediaHeightTextBox.DataContext = _watchMessagesModel;
-            WatchMessagesLabelForegroundTextBox.DataContext = _watchMessagesModel;
-            RandomChoiceLabelForegroundBorder.DataContext = _watchMessagesModel;
-            WatchMessagesLabelFontSize.DataContext = _watchMessagesModel;
+            VideoIdTextBox.DataContext = _models.CommonModel;
+            URITextBox.DataContext = _models.CommonModel;
+            TargetComboBox.DataContext = _models.CommonModel;
+            InsecureCheckBox.DataContext = _models.CommonModel;
+            WindowBackgroundColorTextBox.DataContext = _models.CommonModel;
+            WindowBackgroundColorBorder.DataContext = _models.CommonModel;
 
-            RandomChoiceMediaTextBox.DataContext = _randomChoiceModel;
-            RandomChoiceVolumeSlider.DataContext = _randomChoiceModel;
-            RandomChoiceVolumeLabel.DataContext = _randomChoiceModel;
-            RandomChoiceMediaWidthTextBox.DataContext = _randomChoiceModel;
-            RandomChoiceHeightTextBox.DataContext = _randomChoiceModel;
-            RandomChoiceLabelForegroundTextBox.DataContext = _randomChoiceModel;
-            RandomChoiceLabelForegroundBorder.DataContext = _randomChoiceModel;
-            RandomChoiceLabelFontSize.DataContext = _randomChoiceModel;
+            WatchMessagesDataGrid.DataContext = _models.WatchMessagesModel;
+            WatchMessagesVolumeSlider.DataContext = _models.WatchMessagesModel;
+            WatchMessagesVolumeLabel.DataContext = _models.WatchMessagesModel;
+            WatchMessagesMediaTextBox.DataContext = _models.WatchMessagesModel;
+            WatchMessagesMediaWidthTextBox.DataContext = _models.WatchMessagesModel;
+            WatchMessagesMediaHeightTextBox.DataContext = _models.WatchMessagesModel;
+            WatchMessagesLabelForegroundTextBox.DataContext = _models.WatchMessagesModel;
+            RandomChoiceLabelForegroundBorder.DataContext = _models.WatchMessagesModel;
+            WatchMessagesLabelFontSize.DataContext = _models.WatchMessagesModel;
 
-            GroupingChoicesDataGrid.DataContext = _groupingModel;
-            GroupingWidthTextBox.DataContext = _groupingModel;
-            GroupingHeightTextBox.DataContext = _groupingModel;
-            GroupingBoxForegroundColorTextBox.DataContext = _groupingModel;
-            GroupingBoxForegroundColorBorder.DataContext = _groupingModel;
-            GroupingBoxBackgroundColorTextBox.DataContext = _groupingModel;
-            GroupingBoxBackgroundColorBorder.DataContext = _groupingModel;
-            GroupingBoxBorderColorTextBox.DataContext = _groupingModel;
-            GroupingBoxBorderColorBorder.DataContext = _groupingModel;
-            GroupingGroupingFontSizeTextBox.DataContext = _groupingModel;
-            GroupingPaddingTextBox.DataContext = _groupingModel;
+            RandomChoiceMediaTextBox.DataContext = _models.RandomChoiceModel;
+            RandomChoiceVolumeSlider.DataContext = _models.RandomChoiceModel;
+            RandomChoiceVolumeLabel.DataContext = _models.RandomChoiceModel;
+            RandomChoiceMediaWidthTextBox.DataContext = _models.RandomChoiceModel;
+            RandomChoiceHeightTextBox.DataContext = _models.RandomChoiceModel;
+            RandomChoiceLabelForegroundTextBox.DataContext = _models.RandomChoiceModel;
+            RandomChoiceLabelForegroundBorder.DataContext = _models.RandomChoiceModel;
+            RandomChoiceLabelFontSize.DataContext = _models.RandomChoiceModel;
 
-            VoteChoicesDataGrid.DataContext = _voteModel;
-            VoteDurationSlider.DataContext = _voteModel;
-            VoteDurationLabel.DataContext = _voteModel;
-            VoteBoxForegroundColorTextBox.DataContext = _voteModel;
-            VoteBoxForegroundColorBorder.DataContext = _voteModel;
-            VoteBoxBackgroundColorTextBox.DataContext = _voteModel;
-            VoteBoxBackgroundColorBorder.DataContext = _voteModel;
-            VoteBoxBorderColorTextBox.DataContext = _voteModel;
-            VoteBoxBorderColorBorder.DataContext = _voteModel;
-            VoteFontSizeTextBox.DataContext = _voteModel;
-            VotePaddingTextBox.DataContext = _voteModel;
+            GroupingChoicesDataGrid.DataContext = _models.GroupingModel;
+            GroupingWidthTextBox.DataContext = _models.GroupingModel;
+            GroupingHeightTextBox.DataContext = _models.GroupingModel;
+            GroupingBoxForegroundColorTextBox.DataContext = _models.GroupingModel;
+            GroupingBoxForegroundColorBorder.DataContext = _models.GroupingModel;
+            GroupingBoxBackgroundColorTextBox.DataContext = _models.GroupingModel;
+            GroupingBoxBackgroundColorBorder.DataContext = _models.GroupingModel;
+            GroupingBoxBorderColorTextBox.DataContext = _models.GroupingModel;
+            GroupingBoxBorderColorBorder.DataContext = _models.GroupingModel;
+            GroupingGroupingFontSizeTextBox.DataContext = _models.GroupingModel;
+            GroupingPaddingTextBox.DataContext = _models.GroupingModel;
 
-            WordCloudMessageLimitTextBox.DataContext = _wordCloudModel;
-            WordCloudFontMaxSizeTextBox.DataContext = _wordCloudModel;
-            WordCloudFontMinSizeTextBox.DataContext = _wordCloudModel;
-            WordCloudWidthTextBox.DataContext = _wordCloudModel;
-            WordCloudHeightTextBox.DataContext = _wordCloudModel;
-            WordCloudImageBackgroundColorTextBox.DataContext = _wordCloudModel;
-            WordCloudImageBackgroundColorBorder.DataContext = _wordCloudModel;
-            WordCloudFontColorsDataGrid.DataContext = _wordCloudModel;
+            VoteChoicesDataGrid.DataContext = _models.VoteModel;
+            VoteDurationSlider.DataContext = _models.VoteModel;
+            VoteDurationLabel.DataContext = _models.VoteModel;
+            VoteBoxForegroundColorTextBox.DataContext = _models.VoteModel;
+            VoteBoxForegroundColorBorder.DataContext = _models.VoteModel;
+            VoteBoxBackgroundColorTextBox.DataContext = _models.VoteModel;
+            VoteBoxBackgroundColorBorder.DataContext = _models.VoteModel;
+            VoteBoxBorderColorTextBox.DataContext = _models.VoteModel;
+            VoteBoxBorderColorBorder.DataContext = _models.VoteModel;
+            VoteFontSizeTextBox.DataContext = _models.VoteModel;
+            VotePaddingTextBox.DataContext = _models.VoteModel;
 
+            WordCloudMessageLimitTextBox.DataContext = _models.WordCloudModel;
+            WordCloudFontMaxSizeTextBox.DataContext = _models.WordCloudModel;
+            WordCloudFontMinSizeTextBox.DataContext = _models.WordCloudModel;
+            WordCloudWidthTextBox.DataContext = _models.WordCloudModel;
+            WordCloudHeightTextBox.DataContext = _models.WordCloudModel;
+            WordCloudImageBackgroundColorTextBox.DataContext = _models.WordCloudModel;
+            WordCloudImageBackgroundColorBorder.DataContext = _models.WordCloudModel;
+            WordCloudFontColorsDataGrid.DataContext = _models.WordCloudModel;         
         }
 
         private void LoadConfigFile(object sender, EventArgs e)
@@ -100,7 +96,21 @@ namespace ylccClientTool
         }
         private void SaveConfigFile(object sender, EventArgs e)
         {
-
+            SaveFileDialog dialog = new SaveFileDialog();
+            dialog.Filter = "config file (*.conf)|*.conf";
+            if (dialog.ShowDialog() == true)
+            {
+                ConfigFile.Text = dialog.FileName;
+                using (var ms = new MemoryStream())
+                using (var sr = new StreamReader(ms))
+                {
+                    var serializer = new DataContractJsonSerializer(typeof(Models));
+                    serializer.WriteObject(ms, _models);
+                    ms.Position = 0;
+                    var json = sr.ReadToEnd();
+                    Debug.Print(json);
+                }
+            }
         }
 
         private void WatchMessagesAddWatchMessageClick(object sender, EventArgs e)
@@ -109,7 +119,7 @@ namespace ylccClientTool
             {
                 return;
             }
-            _watchMessagesModel.WatchMessages.Add(new WatchMessage() { Message = WatchMessageTextBox.Text, Active = true, Author = "" });
+            _models.WatchMessagesModel.WatchMessages.Add(new WatchMessage() { Message = WatchMessageTextBox.Text, Active = true, Author = "" });
             WatchMessageTextBox.Text = "";
         }
         private void WatchMessagesRemoveWatchMessageClick(object sender, EventArgs e)
@@ -118,7 +128,7 @@ namespace ylccClientTool
             {
                 return;
             }
-            _watchMessagesModel.WatchMessages.Remove(_watchMessagesModel.WatchMessages[WatchMessagesDataGrid.SelectedIndex]);
+            _models.WatchMessagesModel.WatchMessages.Remove(_models.WatchMessagesModel.WatchMessages[WatchMessagesDataGrid.SelectedIndex]);
             WatchMessagesDataGrid.SelectedIndex = -1;
         }
 
@@ -131,7 +141,7 @@ namespace ylccClientTool
             // ダイアログを表示する
             if (dialog.ShowDialog() == true)
             {
-                _watchMessagesModel.MediaFile = dialog.FileName;
+                _models.WatchMessagesModel.MediaFile = dialog.FileName;
             }
         }
 
@@ -140,14 +150,14 @@ namespace ylccClientTool
             if (WatchMessagesMediaTextBox.Text == null | WatchMessagesMediaTextBox.Text == "") {
                 return;
             }
-            MediaTestWindow window = new MediaTestWindow(_commonModel,  _watchMessagesModel);
+            MediaTestWindow window = new MediaTestWindow(_models.CommonModel, _models.WatchMessagesModel);
             window.Show();
         }
 
         private void WatchMessagesStart(object sender, EventArgs e)
         {
 
-            WatchMessagesWindow window = new WatchMessagesWindow(_commonModel, _watchMessagesModel);
+            WatchMessagesWindow window = new WatchMessagesWindow(_models.CommonModel, _models.WatchMessagesModel);
             window.Show();
             window.Start();
         }
@@ -161,7 +171,7 @@ namespace ylccClientTool
             // ダイアログを表示する
             if (dialog.ShowDialog() == true)
             {
-                _randomChoiceModel.MediaFile = dialog.FileName;
+                _models.RandomChoiceModel.MediaFile = dialog.FileName;
             }
         }
 
@@ -171,13 +181,13 @@ namespace ylccClientTool
             {
                 return;
             }
-            MediaTestWindow window = new MediaTestWindow(_commonModel, _randomChoiceModel);
+            MediaTestWindow window = new MediaTestWindow(_models.CommonModel, _models.RandomChoiceModel);
             window.Show();
         }
 
         private void RandomChoiceStart(object sender, EventArgs e)
         {
-            RandomChoiceWindow window = new RandomChoiceWindow(_commonModel, _randomChoiceModel);
+            RandomChoiceWindow window = new RandomChoiceWindow(_models.CommonModel, _models.RandomChoiceModel);
             window.Show();
             window.Start();
         }
@@ -188,7 +198,7 @@ namespace ylccClientTool
             {
                 return;
             }
-            _groupingModel.GroupingChoices.Add(new GroupingChoice() { Text = GroupingChoiceTextBox.Text });
+            _models.GroupingModel.GroupingChoices.Add(new GroupingChoice() { Text = GroupingChoiceTextBox.Text });
             GroupingChoiceTextBox.Text = "";
         }
 
@@ -198,17 +208,17 @@ namespace ylccClientTool
             {
                 return;
             }
-            _groupingModel.GroupingChoices.Remove(_groupingModel.GroupingChoices[GroupingChoicesDataGrid.SelectedIndex]);
+            _models.GroupingModel.GroupingChoices.Remove(_models.GroupingModel.GroupingChoices[GroupingChoicesDataGrid.SelectedIndex]);
             GroupingChoicesDataGrid.SelectedIndex = -1;
         }
 
         private void GroupingStart(object sender, EventArgs e)
         {
-            if (_groupingModel.GroupingChoices.Count == 0)
+            if (_models.GroupingModel.GroupingChoices.Count == 0)
             {
                 return;
             }
-            GroupingWindow window = new GroupingWindow(_commonModel, _groupingModel);
+            GroupingWindow window = new GroupingWindow(_models.CommonModel, _models.GroupingModel);
             window.Show();
             window.Start();
         }
@@ -219,7 +229,7 @@ namespace ylccClientTool
             {
                 return;
             }
-            _voteModel.VoteChoices.Add(new VoteChoice() { Text = VoteChoiceTextBox.Text, Count = 0, Rate = 0, RateStr = "" });
+            _models.VoteModel.VoteChoices.Add(new VoteChoice() { Text = VoteChoiceTextBox.Text});
             VoteChoiceTextBox.Text = "";
         }
 
@@ -229,17 +239,17 @@ namespace ylccClientTool
             {
                 return;
             }
-            _voteModel.VoteChoices.Remove(_voteModel.VoteChoices[VoteChoicesDataGrid.SelectedIndex]);
+            _models.VoteModel.VoteChoices.Remove(_models.VoteModel.VoteChoices[VoteChoicesDataGrid.SelectedIndex]);
             VoteChoicesDataGrid.SelectedIndex = -1;
         }
 
         private void VoteStart(object sender, EventArgs e)
         {
-            if (_voteModel.VoteChoices.Count == 0)
+            if (_models.VoteModel.VoteChoices.Count == 0)
             {
                 return;
             }
-            VoteWindow window = new VoteWindow(_commonModel, _voteModel);
+            VoteWindow window = new VoteWindow(_models.CommonModel, _models.VoteModel);
             window.Show();
             window.Start();
         }
@@ -250,7 +260,7 @@ namespace ylccClientTool
             {
                 return;
             }
-            _wordCloudModel.FontColors.Add(new FontColor() { Color = WordCloudFontColorTextBox.Text });
+            _models.WordCloudModel.FontColors.Add(new FontColor() { Color = WordCloudFontColorTextBox.Text });
             WatchMessageTextBox.Text = "";
         }
 
@@ -260,17 +270,17 @@ namespace ylccClientTool
             {
                 return;
             }
-            _wordCloudModel.FontColors.Remove(_wordCloudModel.FontColors[WordCloudFontColorsDataGrid.SelectedIndex]);
+            _models.WordCloudModel.FontColors.Remove(_models.WordCloudModel.FontColors[WordCloudFontColorsDataGrid.SelectedIndex]);
             WordCloudFontColorsDataGrid.SelectedIndex = -1;
         }
 
         private void WordCloudStart(object sender, EventArgs e)
         {
-            if (_wordCloudModel.FontColors.Count == 0)
+            if (_models.WordCloudModel.FontColors.Count == 0)
             {
                 return;
             }
-            WordCloudWindow window = new WordCloudWindow(_commonModel, _wordCloudModel);
+            WordCloudWindow window = new WordCloudWindow(_models.CommonModel, _models.WordCloudModel);
             window.Show();
             window.Start();
         }

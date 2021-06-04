@@ -10,8 +10,8 @@
         <StackPanel Orientation="Vertical" HorizontalAlignment="Center">
             <StackPanel Orientation="Horizontal">
                 <TextBox x:Name="ConfigFile" Width="400" Margin="5"/>
-                <Button Content="load config file" Width="100" Margin="5" Click="LoadConfigFile" />
-                <Button Content="save config file" Width="100" Margin="5" Click="SaveConfigFile" />
+                <Button Content="save" Width="100" Margin="5" Click="SaveConfigFile" />
+                <Button Content="load" Width="100" Margin="5" Click="LoadConfigFile" />
             </StackPanel>
             <Separator/>
             <StackPanel Orientation="Horizontal">

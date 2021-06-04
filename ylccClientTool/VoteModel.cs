@@ -22,48 +22,6 @@ namespace ylccClientTool
                 OnPropertyChanged("Text");
             }
         }
-
-        private int count;
-        public int Count
-        {
-            get
-            {
-                return this.count;
-            }
-            set
-            {
-                this.count = value;
-                OnPropertyChanged("Count");
-            }
-        }
-
-        private double rate;
-        public double Rate
-        {
-            get
-            {
-                return this.rate;
-            }
-            set
-            {
-                this.rate = value;
-                OnPropertyChanged("Rate");
-            }
-        }
-
-        private string rateStr;
-        public string RateStr
-        {
-            get
-            {
-                return this.rateStr;
-            }
-            set
-            {
-                this.rateStr = value;
-                OnPropertyChanged("RateStr");
-            }
-        }
     }
 
     public class VoteModel: BaseModel

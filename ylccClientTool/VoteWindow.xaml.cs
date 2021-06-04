@@ -24,11 +24,63 @@ namespace ylccClientTool
     /// VoteWindow.xaml の相互作用ロジック
     /// </summary>
 
+    public class VoteResult : INotifyPropertyChanged
+    {
+        private int count;
+        public int Count
+        {
+            get
+            {
+                return this.count;
+            }
+            set
+            {
+                this.count = value;
+                OnPropertyChanged("Count");
+            }
+        }
+
+        private double rate;
+        public double Rate
+        {
+            get
+            {
+                return this.rate;
+            }
+            set
+            {
+                this.rate = value;
+                OnPropertyChanged("Rate");
+            }
+        }
+
+        private string rateStr;
+        public string RateStr
+        {
+            get
+            {
+                return this.rateStr;
+            }
+            set
+            {
+                this.rateStr = value;
+                OnPropertyChanged("RateStr");
+            }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        protected void OnPropertyChanged([CallerMemberName] string name = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+        }
+    }
+
     public partial class VoteWindow : Window, INotifyPropertyChanged
     {
 
         private readonly YlccProtocol _protocol = new YlccProtocol();
         private readonly int _minutes = 60;
+        private ObservableCollection<VoteResult> _voteResults = new ObservableCollection<VoteResult>();
         private CommonModel _commonModel;
         private VoteModel _voteModel;
         private int _maxCols;
@@ -36,7 +88,6 @@ namespace ylccClientTool
         private int _boxHeight;
         private string _voteId;
         private System.Timers.Timer _timer;
-
 
         private int countDown;
         public int CountDown
@@ -137,8 +188,12 @@ namespace ylccClientTool
                     return;
                 }
                 _voteId = openVoteResponse.VoteId;
-                _render();
                 CountDown = _voteModel.Duration * 60;
+                for (int i = 0; i < _voteModel.VoteChoices.Count; i += 1)
+                {
+                    _voteResults.Add(new VoteResult() { Count = 0, Rate = 0, RateStr = "" });
+                }
+                _render();
                 _timer = new System.Timers.Timer(1000);
                 _timer.Elapsed += (s, e) => {
                     if (CountDown > 0)
@@ -234,10 +289,10 @@ namespace ylccClientTool
                 int idx = 0;
                 foreach (VoteCount count in getVoteResultResponse.Counts)
                 {
-                    VoteChoice choice = _voteModel.VoteChoices[idx];
-                    choice.Count = count.Count;
-                    choice.Rate = Math.Ceiling((double)count.Count * 100.0 / (double)_voteModel.Total * 10) / 10;
-                    choice.RateStr = choice.Rate.ToString() + "%";
+                    VoteResult result = _voteResults[idx];
+                    result.Count = count.Count;
+                    result.Rate = Math.Ceiling((double)count.Count * 100.0 / (double)_voteModel.Total * 10) / 10;
+                    result.RateStr = result.Rate.ToString() + "%";
                     idx += 1;
                 }
             }
@@ -295,18 +350,17 @@ namespace ylccClientTool
             }
         }
 
-
-
         private void _render()
         {
             int idx = 0;
             foreach (VoteChoice choice in _voteModel.VoteChoices)
             {
+                VoteResult result = _voteResults[idx];
                 int rowPos = idx / _maxCols;
                 int colPos = idx % _maxCols;
                 _renderBackgroudBox(rowPos, colPos);
-                _renderIndexBox(choice, idx, rowPos, colPos);
-                _renderResultBox(choice, rowPos, colPos);
+                _renderIndexBox(idx, rowPos, colPos);
+                _renderResultBox(result, rowPos, colPos);
                 _renderChoiceBox(choice, rowPos, colPos);
                 idx += 1;
             }
@@ -330,7 +384,7 @@ namespace ylccClientTool
             MainGrid.Children.Add(border);
         }
 
-        private void _renderIndexBox(VoteChoice choice, int idx, int rowPos, int colPos)
+        private void _renderIndexBox(int idx, int rowPos, int colPos)
         {
             TextBox textBox = new TextBox();
             textBox.Text = (idx + 1).ToString() + ".";
@@ -352,11 +406,11 @@ namespace ylccClientTool
             MainGrid.Children.Add(textBox);
         }
 
-        private void _renderResultBox(VoteChoice choice, int rowPos, int colPos)
+        private void _renderResultBox(VoteResult result, int rowPos, int colPos)
         {
             TextBox textBox = new TextBox();
             textBox.SetBinding(TextBox.TextProperty, "RateStr");
-            textBox.DataContext = choice;
+            textBox.DataContext = result;
             textBox.FontSize = _voteModel.FontSize * 1.5;
             textBox.BorderThickness = new Thickness(0);
             textBox.HorizontalAlignment = HorizontalAlignment.Left;
