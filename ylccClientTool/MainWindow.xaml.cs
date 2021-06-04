@@ -33,11 +33,11 @@ namespace ylccClientTool
             InitializeComponent();
 
             string json = Properties.Settings.Default.lastConfig;
-            var _models = new Models();
-            var ms = new MemoryStream(Encoding.UTF8.GetBytes(json));
+            Debug.Print(json);
+            MemoryStream ms = new MemoryStream(Encoding.UTF8.GetBytes(json));
             try
             {
-                var ser = new DataContractJsonSerializer(_models.GetType());
+                DataContractJsonSerializer ser = new DataContractJsonSerializer(typeof(Models));
                 Models newModels = ser.ReadObject(ms) as Models;
                 ms.Close();
                 _models.Update(newModels);
@@ -119,12 +119,11 @@ namespace ylccClientTool
             {
                 ConfigFile.Text = dialog.FileName;
                 string json = System.IO.File.ReadAllText(ConfigFile.Text);
-                var _models = new Models();
-                var ms = new MemoryStream(Encoding.UTF8.GetBytes(json));
+                MemoryStream ms = new MemoryStream(Encoding.UTF8.GetBytes(json));
                 try
                 {
-                    var ser = new DataContractJsonSerializer(_models.GetType());
-                    Models newModels = ser.ReadObject(ms) as Models;                    
+                    DataContractJsonSerializer ser = new DataContractJsonSerializer(typeof(Models));
+                    Models newModels = ser.ReadObject(ms) as Models;
                     _models.Update(newModels);
                 }
                 catch (System.Runtime.Serialization.SerializationException ex)
@@ -150,10 +149,10 @@ namespace ylccClientTool
                     using (var ms = new MemoryStream())
                     using (var sr = new StreamReader(ms))
                     {
-                        var serializer = new DataContractJsonSerializer(typeof(Models));
+                        DataContractJsonSerializer serializer = new DataContractJsonSerializer(typeof(Models));
                         serializer.WriteObject(ms, _models);
                         ms.Position = 0;
-                        var json = sr.ReadToEnd();
+                        string json = sr.ReadToEnd();
                         File.WriteAllText(ConfigFile.Text, json);
                     }
                 }
@@ -171,11 +170,13 @@ namespace ylccClientTool
                 using (var ms = new MemoryStream())
                 using (var sr = new StreamReader(ms))
                 {
-                    var serializer = new DataContractJsonSerializer(typeof(Models));
+                    DataContractJsonSerializer serializer = new DataContractJsonSerializer(typeof(Models));
                     serializer.WriteObject(ms, _models);
                     ms.Position = 0;
-                    var json = sr.ReadToEnd();
+                    string json = sr.ReadToEnd();
+                    Debug.Print(json);
                     Properties.Settings.Default.lastConfig = json;
+                    Properties.Settings.Default.Save();
                 }
             }
             catch (System.Runtime.Serialization.SerializationException ex)

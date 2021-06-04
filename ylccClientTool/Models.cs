@@ -6,12 +6,12 @@ namespace ylccClientTool
 {
     public class Models
     {
-        public CommonModel CommonModel;
-        public WatchMessagesModel WatchMessagesModel;
-        public RandomChoiceModel RandomChoiceModel;
-        public GroupingModel GroupingModel;
-        public WordCloudModel WordCloudModel;
-        public VoteModel VoteModel;
+        public CommonModel CommonModel { get; set; }
+        public WatchMessagesModel WatchMessagesModel { get; set; }
+        public RandomChoiceModel RandomChoiceModel { get; set; }
+        public GroupingModel GroupingModel { get; set; }
+        public WordCloudModel WordCloudModel { get; set; }
+        public VoteModel VoteModel { get; set; }
 
         public Models()
         {

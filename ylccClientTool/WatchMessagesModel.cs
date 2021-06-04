@@ -53,7 +53,8 @@ namespace ylccClientTool
 
     public class WatchMessagesModel : RandomChoiceModel
     {
-        private ObservableCollection<WatchMessage> watchMessages;
+                                                   
+        private ObservableCollection<WatchMessage> watchMessages;                                                  
         public ObservableCollection<WatchMessage> WatchMessages
         {
             get
@@ -74,7 +75,7 @@ namespace ylccClientTool
 
         public void Update(WatchMessagesModel newModel)
         {
-
+            base.Update(newModel);
         }
 
     }
